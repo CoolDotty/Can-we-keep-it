@@ -1,8 +1,24 @@
-[gd_scene load_steps=2 format=3 uid="uid://duf2keijulwq1"]
+[gd_scene load_steps=4 format=3 uid="uid://duf2keijulwq1"]
 
 [ext_resource type="PackedScene" uid="uid://rwjo72v4gsim" path="res://scenes/Player/Player.tscn" id="1_wjdv8"]
+[ext_resource type="Texture2D" uid="uid://pwws0438qk6o" path="res://addons/kenney_prototype_textures/dark/texture_07.png" id="2_r63uq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mgcyx"]
+size = Vector2(641, 20)
 
 [node name="Main" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_wjdv8")]
 position = Vector2(293, 182)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(319, 350)
+metadata/_edit_group_ = true
+
+[node name="Texture07" type="Sprite2D" parent="StaticBody2D"]
+position = Vector2(7.62939e-06, 0)
+scale = Vector2(0.626953, 0.0214844)
+texture = ExtResource("2_r63uq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("RectangleShape2D_mgcyx")

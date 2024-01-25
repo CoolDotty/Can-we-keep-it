@@ -7,7 +7,8 @@ extends CharacterBody2D
 #var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 #jump and move vars [g]round [a]ir
-enum MoveState { on_ground, jumping, falling, fast_fall, cyote}
+enum MoveState { on_ground, jumping, falling, fast_fall, coyote_time}
+var prev_player_state = null
 var player_state = MoveState.on_ground
 
 @export var g_top_speed		= 200
@@ -35,32 +36,19 @@ func _physics_process(delta):
 	if is_on_floor():
 		player_state = MoveState.on_ground
 	
+	var is_entering_new_state = player_state != prev_player_state
+	if is_entering_new_state:
+		prev_player_state = player_state
+	
 	#check state
 	match player_state:
 		MoveState.on_ground:
-			print("on ground")
-			#jump
-			if Input.is_action_just_pressed("jump"):
-				print("jump")
-				player_state = MoveState.jumping
-				velocity.y = jump_strength
-				 
+			on_ground(delta, is_entering_new_state)
 		MoveState.jumping:
-			velocity.y = move_toward(velocity.y, max_fall_speed, grav_on_jump*delta) 
+			jumping(delta, is_entering_new_state)
 		MoveState.falling:
-			print("falling")
-			velocity.y = move_toward(velocity.y, max_fall_speed, grav_normal)
-			
-	#move left and right
-	var direction = Input.get_axis("move_left", "move_right")
-	if direction :
-		print("moving")
-		velocity.x = move_toward(velocity.x, direction*g_top_speed, g_forward_speed)
-		print(velocity.x)
-	else :
-		velocity.x = move_toward(velocity.x, 0, 10)
+			falling(delta, is_entering_new_state)
 	
-	move_and_slide()
 	
 	## Add the gravity.
 	#if not is_on_floor():
@@ -85,4 +73,49 @@ func _physics_process(delta):
 		#velocity.x = move_toward(velocity.x, 0, 10)
 #
 	#move_and_slide()
+
+func on_ground(delta, isEntering: bool) -> void:
+	if (isEntering):
+		pass
+	print("on ground")
+	
+	#jump
+	if Input.is_action_just_pressed("jump"):
+		print("jump")
+		player_state = MoveState.jumping
+		velocity.y = jump_strength
+	
+	#move left and right
+	var direction = Input.get_axis("move_left", "move_right")
+	if direction :
+		print("moving")
+		velocity.x = move_toward(velocity.x, direction*g_top_speed, g_forward_speed)
+		print(velocity.x)
+	else :
+		velocity.x = move_toward(velocity.x, 0, 10)
+	
+	move_and_slide()
+
+func jumping(delta, isEntering: bool) -> void:
+	if (isEntering):
+		pass
+	
+	velocity.y = move_toward(velocity.y, max_fall_speed, grav_on_jump*delta)
+	
+	if velocity.y <= 0:
+		player_state = MoveState.falling
+	
+	move_and_slide()
+
+func falling(delta, isEntering: bool) -> void:
+	if (isEntering):
+		pass
+	
+	print("falling")
+	velocity.y = move_toward(velocity.y, max_fall_speed, grav_normal*delta)
+	
+	var did_hit_something = move_and_slide()
+	
+	if did_hit_something:
+		player_state = MoveState.on_ground
 

@@ -21,12 +21,13 @@ var player_state = MoveState.on_ground
 @export var a_reverse_speed =  10
 @export var a_decel 		=  300 #air friction
 
-@export var jump_strength 	= -400
+@export var jump_strength 	= -600
 @export var grav_normal		=  980 #normal gravity, like when move off a ledge
 @export var grav_on_jump 	=  980 #project settings = 980
-@export var grav_on_fall 	=  980*2 #increase grav on release jump button
+@export var grav_on_fall 	=  980 * 2 #increase grav on release jump button
 @export var max_fall_speed  =  800
 
+@onready var jump_hold_timer = $JumpHoldTimer
 
 #PHYSICS STEP
 func _physics_process(delta):
@@ -77,9 +78,7 @@ func on_ground(delta, isEntering: bool) -> void:
 	
 	#jump
 	if Input.is_action_just_pressed("jump"):
-		print("jump")
 		player_state = MoveState.jumping
-		velocity.y = jump_strength
 	
 	#move left and right
 	var direction = Input.get_axis("move_left", "move_right")
@@ -92,29 +91,26 @@ func on_ground(delta, isEntering: bool) -> void:
 	
 	move_and_slide()
 
+#var current_jump: float = 0.0 
 func jumping(delta, isEntering: bool) -> void:
 	if (isEntering):
-		pass
+		velocity.y = jump_strength
+		jump_hold_timer.start()
 	
-	velocity.y = move_toward(velocity.y, max_fall_speed, grav_on_jump*delta)
+	velocity.y = move_toward(velocity.y, 0.0, grav_on_jump * delta)
 	
-	if velocity.y <= 0:
+	if Input.is_action_just_released("jump") or jump_hold_timer.is_stopped():
 		player_state = MoveState.falling
+	
+	print(velocity.y)
 	
 	move_and_slide()
 
 func falling(delta, isEntering: bool) -> void:
-	# Hello I am breaking your thing with a merge!!!!!!
-	# Hello I am breaking your thing with a merge!!!!!!
-	# Hello I am breaking your thing with a merge!!!!!!
-	# Hello I am breaking your thing with a merge!!!!!!
-	# Hello I am breaking your thing with a merge!!!!!!
-	# Hello I am breaking your thing with a merge!!!!!!
 	if (isEntering):
 		pass
 	
-	print("falling")
-	velocity.y = move_toward(velocity.y, max_fall_speed, grav_normal*delta)
+	velocity.y = move_toward(velocity.y, max_fall_speed, grav_on_fall * delta)
 	
 	var did_hit_something = move_and_slide()
 	

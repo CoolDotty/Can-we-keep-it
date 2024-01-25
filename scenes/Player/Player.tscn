@@ -15,3 +15,6 @@ shape = SubResource("RectangleShape2D_y01nk")
 [node name="Icon" type="Sprite2D" parent="."]
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("2_pa6j8")
+
+[node name="JumpHoldTimer" type="Timer" parent="."]
+one_shot = true

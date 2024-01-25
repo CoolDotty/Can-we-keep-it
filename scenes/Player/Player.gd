@@ -32,10 +32,6 @@ var player_state = MoveState.on_ground
 func _physics_process(delta):
 	#friction check
 	
-	#state check
-	if is_on_floor():
-		player_state = MoveState.on_ground
-	
 	var is_entering_new_state = player_state != prev_player_state
 	if is_entering_new_state:
 		prev_player_state = player_state
@@ -108,6 +104,7 @@ func jumping(delta, isEntering: bool) -> void:
 	move_and_slide()
 
 func falling(delta, isEntering: bool) -> void:
+	# Hello I am breaking your thing with a merge!!!!!!
 	if (isEntering):
 		pass
 	

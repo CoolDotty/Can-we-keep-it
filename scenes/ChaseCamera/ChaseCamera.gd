@@ -1,7 +1,7 @@
 extends Camera2D
 
 @export var focus: Node2D = null
-@export var lerp_speed: float = 5.0
+@export var lerp_speed: float = 20.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

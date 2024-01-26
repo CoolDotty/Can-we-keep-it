@@ -11,8 +11,8 @@ var prev_player_state = null
 var player_state = MoveState.falling
 
 #jump and move vars [g]round [a]ir
-@export var g_top_speed		= 600
-@export var g_jog_speed		= 100
+@export var g_top_speed		= 500
+@export var g_jog_speed		= 60
 @export var g_turbo_multiplier = 6
 @export var g_forward_speed =  1
 @export var g_reverse_speed =  10
@@ -23,7 +23,7 @@ var player_state = MoveState.falling
 @export var a_reverse_speed =  5
 @export var a_decel 		=  3 #air friction
 
-@export var jump_strength 	= -600
+@export var jump_strength 	= -400
 @export var grav_normal		=  980 #normal gravity, like when move off a ledge
 @export var grav_on_jump 	=  980 #project settings = 980
 @export var grav_on_fall 	=  980 * 2 #increase grav on release jump button
@@ -32,11 +32,76 @@ var player_state = MoveState.falling
 @onready var jump_hold_timer = $JumpHoldTimer
 @onready var turbo_timer = $TurboTimer
 @onready var stun_timer = $StunTimer
+@onready var player_sprite = $FollowParent2D/Player
 
+var direction = 1
+
+func _process(delta):
+	match player_state:
+		MoveState.idle:
+			player_sprite.rotation_degrees = 0
+			player_sprite.speed_scale = -1
+			player_sprite.frame = 1
+		MoveState.jogging:
+			player_sprite.rotation_degrees = 0
+			player_sprite.speed_scale = sign(velocity.x) * clampf(abs(velocity.x * 0.01), 0.1, 2.0)
+			if direction == 1:
+				# Point in opposite direction if stunned
+				if player_state == MoveState.stun:
+					player_sprite.scale.x = 1
+				else:
+					player_sprite.scale.x = -1
+			else:
+				# Point in opposite direction if stunned
+				if player_state == MoveState.stun:
+					player_sprite.scale.x = -1
+				else:
+					player_sprite.scale.x = 1
+		MoveState.turbo:
+			player_sprite.rotation_degrees = 0
+			player_sprite.speed_scale = sign(velocity.x) * clampf(abs(velocity.x * 0.01), 0.1, 2.0)
+			if direction == 1:
+				# Point in opposite direction if stunned
+				if player_state == MoveState.stun:
+					player_sprite.scale.x = 1
+				else:
+					player_sprite.scale.x = -1
+			else:
+				# Point in opposite direction if stunned
+				if player_state == MoveState.stun:
+					player_sprite.scale.x = -1
+				else:
+					player_sprite.scale.x = 1
+		MoveState.skidding:
+			player_sprite.speed_scale = -1
+			player_sprite.frame = 1
+			player_sprite.rotation_degrees = 0
+		MoveState.jumping:
+			player_sprite.speed_scale = -1
+			player_sprite.frame = 0
+			player_sprite.rotation_degrees = 0
+		MoveState.falling:
+			player_sprite.speed_scale = -1
+			player_sprite.frame = 3
+			player_sprite.rotation_degrees = 0
+		MoveState.stun:
+			player_sprite.speed_scale = -1
+			player_sprite.frame = 1
+			player_sprite.rotation_degrees = 90
+	
 
 #PHYSICS STEP
 func _physics_process(delta):
 	#friction check
+	
+	if velocity.x < 0:
+		direction = -1
+	if velocity.x > 0:
+		direction = 1
+	if abs(velocity.x) > 0:
+		player_sprite.play()
+	else:
+		player_sprite.stop()
 	
 	$DEBUG.text = MoveState.keys()[player_state]
 	
@@ -353,16 +418,16 @@ func on_stun(delta, isEntering: bool) -> void:
 		velocity.y = -300
 		velocity.x = 300
 	
-	print(velocity.x)
 	velocity.x = move_toward(velocity.x, 0, g_decel)
 	velocity.y = move_toward(velocity.y, max_fall_speed, grav_on_fall * delta)
 	
 	var pre_pos = position
+	var pre_vel = velocity
 	move_and_slide()
 	
 	#hit a wall
-	if pre_pos == position:
-		velocity.x *= -1
+	if is_on_wall():
+		velocity.x = pre_vel.x * -1
 	
 	if stun_timer.is_stopped():
 		if Input.get_axis("move_left", "move_right"):

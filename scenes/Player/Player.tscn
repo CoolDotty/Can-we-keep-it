@@ -1,36 +1,88 @@
-[gd_scene load_steps=7 format=3 uid="uid://rwjo72v4gsim"]
+[gd_scene load_steps=14 format=3 uid="uid://rwjo72v4gsim"]
 
 [ext_resource type="Script" path="res://scenes/Player/Player.gd" id="1_ynfev"]
 [ext_resource type="Script" path="res://addons/FollowParent/FollowParent2D/FollowParent2D.gd" id="2_n4u13"]
-[ext_resource type="Texture2D" uid="uid://cxccupngq2q7k" path="res://icon.svg" id="2_pa6j8"]
 [ext_resource type="Shader" path="res://scripts/Outline.gdshader" id="3_1j4ee"]
+[ext_resource type="Texture2D" uid="uid://bd11npa3k70si" path="res://scenes/Player/plop_run.png" id="4_52fsi"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y01nk"]
-size = Vector2(30, 32)
+size = Vector2(24, 23)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2mjv4"]
 shader = ExtResource("3_1j4ee")
 shader_parameter/color = Color(0, 0, 0, 1)
-shader_parameter/width = 4.0
+shader_parameter/width = 1.0
 shader_parameter/pattern = 2
 shader_parameter/inside = false
 shader_parameter/add_margins = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ikbr5"]
+atlas = ExtResource("4_52fsi")
+region = Rect2(0, 0, 27, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c7l05"]
+atlas = ExtResource("4_52fsi")
+region = Rect2(27, 0, 27, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6dbhn"]
+atlas = ExtResource("4_52fsi")
+region = Rect2(54, 0, 27, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_885gp"]
+atlas = ExtResource("4_52fsi")
+region = Rect2(81, 0, 27, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1daw5"]
+atlas = ExtResource("4_52fsi")
+region = Rect2(108, 0, 27, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h82d8"]
+atlas = ExtResource("4_52fsi")
+region = Rect2(135, 0, 27, 36)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_mjjow"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ikbr5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c7l05")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6dbhn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_885gp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1daw5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h82d8")
+}],
+"loop": true,
+"name": &"Turbo",
+"speed": 15.0
+}]
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_ynfev")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
 shape = SubResource("RectangleShape2D_y01nk")
 
 [node name="FollowParent2D" type="Node2D" parent="."]
 top_level = true
 script = ExtResource("2_n4u13")
-lerp_speed = 50.0
+lerp_speed = 100.0
 
-[node name="Icon" type="Sprite2D" parent="FollowParent2D"]
+[node name="Player" type="AnimatedSprite2D" parent="FollowParent2D"]
 material = SubResource("ShaderMaterial_2mjv4")
-scale = Vector2(0.25, 0.25)
-texture = ExtResource("2_pa6j8")
+sprite_frames = SubResource("SpriteFrames_mjjow")
+animation = &"Turbo"
+frame_progress = 0.848578
 
 [node name="JumpHoldTimer" type="Timer" parent="."]
 wait_time = 0.5
@@ -44,7 +96,6 @@ offset_bottom = -20.0
 text = "TEST"
 
 [node name="TurboTimer" type="Timer" parent="."]
-wait_time = 1.5
 one_shot = true
 
 [node name="StunTimer" type="Timer" parent="."]

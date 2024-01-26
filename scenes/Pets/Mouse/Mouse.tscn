@@ -30,3 +30,10 @@ texture = SubResource("AtlasTexture_ak85h")
 
 [node name="Feet" type="Node2D" parent="."]
 position = Vector2(0, 5)
+
+[node name="FidgetTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0

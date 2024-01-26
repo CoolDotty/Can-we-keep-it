@@ -86,7 +86,7 @@ lerp_speed = 100.0
 material = SubResource("ShaderMaterial_2mjv4")
 sprite_frames = SubResource("SpriteFrames_mjjow")
 animation = &"Turbo"
-frame_progress = 0.93743
+frame_progress = 0.153492
 
 [node name="Hand" type="Node2D" parent="FollowParent2D/Player"]
 z_index = 1

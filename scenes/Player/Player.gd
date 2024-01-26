@@ -129,7 +129,7 @@ func _physics_process(delta):
 	
 	if is_entering_new_state:
 		prev_player_state = player_state
-		print(MoveState.keys()[player_state])
+		#print(MoveState.keys()[player_state])
 
 
 func on_ground(delta, isEntering: bool) -> void:
@@ -438,7 +438,6 @@ func _on_grabbox_body_entered(body):
 			return
 		var pet = body
 		# Empty hand and player is higher than pet
-		print(feet.global_position.y, '<', pet.feet.global_position.y)
 		if hand_is_empty() and feet.global_position.y < pet.feet.global_position.y:
 			pet.get_parent().remove_child(pet)
 			pet.pick_up()

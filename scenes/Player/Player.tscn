@@ -1,10 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://rwjo72v4gsim"]
+[gd_scene load_steps=7 format=3 uid="uid://rwjo72v4gsim"]
 
 [ext_resource type="Script" path="res://scenes/Player/Player.gd" id="1_ynfev"]
+[ext_resource type="Script" path="res://addons/FollowParent/FollowParent2D/FollowParent2D.gd" id="2_n4u13"]
 [ext_resource type="Texture2D" uid="uid://cxccupngq2q7k" path="res://icon.svg" id="2_pa6j8"]
+[ext_resource type="Shader" path="res://scripts/Outline.gdshader" id="3_1j4ee"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y01nk"]
 size = Vector2(30, 32)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2mjv4"]
+shader = ExtResource("3_1j4ee")
+shader_parameter/color = Color(0, 0, 0, 1)
+shader_parameter/width = 4.0
+shader_parameter/pattern = 2
+shader_parameter/inside = false
+shader_parameter/add_margins = true
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_ynfev")
@@ -12,9 +22,30 @@ script = ExtResource("1_ynfev")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_y01nk")
 
-[node name="Icon" type="Sprite2D" parent="."]
+[node name="FollowParent2D" type="Node2D" parent="."]
+top_level = true
+script = ExtResource("2_n4u13")
+lerp_speed = 50.0
+
+[node name="Icon" type="Sprite2D" parent="FollowParent2D"]
+material = SubResource("ShaderMaterial_2mjv4")
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("2_pa6j8")
 
 [node name="JumpHoldTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[node name="DEBUG" type="Label" parent="."]
+offset_left = -19.0
+offset_top = -43.0
+offset_right = 21.0
+offset_bottom = -20.0
+text = "TEST"
+
+[node name="TurboTimer" type="Timer" parent="."]
+wait_time = 1.5
+one_shot = true
+
+[node name="StunTimer" type="Timer" parent="."]
 one_shot = true

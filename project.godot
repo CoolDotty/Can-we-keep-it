@@ -22,9 +22,11 @@ Preload="*res://scripts/Preload.gd"
 
 [display]
 
-window/size/viewport_width=640
-window/size/viewport_height=360
 window/stretch/mode="viewport"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/FollowParent/plugin.cfg")
 
 [input]
 

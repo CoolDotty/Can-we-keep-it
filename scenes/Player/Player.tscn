@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://rwjo72v4gsim"]
+[gd_scene load_steps=15 format=3 uid="uid://rwjo72v4gsim"]
 
 [ext_resource type="Script" path="res://scenes/Player/Player.gd" id="1_ynfev"]
 [ext_resource type="Script" path="res://addons/FollowParent/FollowParent2D/FollowParent2D.gd" id="2_n4u13"]
@@ -66,7 +66,11 @@ animations = [{
 "speed": 15.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fnku6"]
+size = Vector2(26, 24)
+
 [node name="Player" type="CharacterBody2D"]
+collision_layer = 2
 script = ExtResource("1_ynfev")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -82,7 +86,11 @@ lerp_speed = 100.0
 material = SubResource("ShaderMaterial_2mjv4")
 sprite_frames = SubResource("SpriteFrames_mjjow")
 animation = &"Turbo"
-frame_progress = 0.848578
+frame_progress = 0.93743
+
+[node name="Hand" type="Node2D" parent="FollowParent2D/Player"]
+z_index = 1
+position = Vector2(-13, 0)
 
 [node name="JumpHoldTimer" type="Timer" parent="."]
 wait_time = 0.5
@@ -100,3 +108,17 @@ one_shot = true
 
 [node name="StunTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="Grabbox" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Grabbox"]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_fnku6")
+debug_color = Color(0.956863, 0, 0.537255, 0.419608)
+
+[node name="Feet" type="Node2D" parent="."]
+position = Vector2(0, 12)
+
+[connection signal="body_entered" from="Grabbox" to="." method="_on_grabbox_body_entered"]

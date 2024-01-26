@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://duf2keijulwq1"]
+[gd_scene load_steps=7 format=3 uid="uid://duf2keijulwq1"]
 
 [ext_resource type="PackedScene" uid="uid://rwjo72v4gsim" path="res://scenes/Player/Player.tscn" id="1_wjdv8"]
 [ext_resource type="PackedScene" uid="uid://cp1x400lifuke" path="res://scenes/Tilemap/Tiles.tscn" id="3_hm2xn"]
 [ext_resource type="PackedScene" uid="uid://bv3v5iu8msevs" path="res://scenes/ChaseCamera/ChaseCamera.tscn" id="4_nqlin"]
+[ext_resource type="PackedScene" uid="uid://ckybk2trj1vee" path="res://scenes/Pets/Mouse/Mouse.tscn" id="4_tiwio"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mgcyx"]
 size = Vector2(2148.5, 20)
@@ -44,3 +45,6 @@ layer_0/tile_data = PackedInt32Array(2424862, 65536, 0, 2424861, 65536, 0, 24248
 
 [node name="ChaseCamera" parent="." node_paths=PackedStringArray("focus") instance=ExtResource("4_nqlin")]
 focus = NodePath("../Player")
+
+[node name="Mouse" parent="." instance=ExtResource("4_tiwio")]
+position = Vector2(-572, 329)

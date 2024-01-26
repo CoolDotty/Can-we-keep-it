@@ -33,6 +33,9 @@ var player_state = MoveState.falling
 @onready var turbo_timer = $TurboTimer
 @onready var stun_timer = $StunTimer
 @onready var player_sprite = $FollowParent2D/Player
+@onready var hand = $FollowParent2D/Player/Hand
+@onready var feet = $Feet
+
 
 var direction = 1
 
@@ -127,30 +130,7 @@ func _physics_process(delta):
 	if is_entering_new_state:
 		prev_player_state = player_state
 		print(MoveState.keys()[player_state])
-	
-	## Add the gravity.
-	#if not is_on_floor():
-		#velocity.y += grav_on_jump * delta
-#
-	## Handle jump.
-	#if Input.is_action_just_pressed("jump"):
-		##velocity.y = JUMP_VELOCITY
-		#if is_on_floor() :
-			#velocity.y = jump_strength
-		##else :
-		##	velocity.y += grav_on_jump
-	## Get the input direction and handle the movement/deceleration.
-	## As good practice, you should replace UI actions with custom gameplay actions.
-	#var direction = Input.get_axis("move_left", "move_right")
-#
-	#if direction :
-		#velocity.x = move_toward(velocity.x, direction*g_top_speed, g_forward_speed)
-		#print(velocity.x)
-#
-	#else:
-		#velocity.x = move_toward(velocity.x, 0, 10)
-#
-	#move_and_slide()
+
 
 func on_ground(delta, isEntering: bool) -> void:
 	if (isEntering):
@@ -417,6 +397,7 @@ func on_stun(delta, isEntering: bool) -> void:
 		stun_timer.start()
 		velocity.y = -300
 		velocity.x = 300
+		drop_hand()
 	
 	velocity.x = move_toward(velocity.x, 0, g_decel)
 	velocity.y = move_toward(velocity.y, max_fall_speed, grav_on_fall * delta)
@@ -435,3 +416,33 @@ func on_stun(delta, isEntering: bool) -> void:
 		else:
 			player_state = MoveState.skidding
 		return
+
+func drop_hand():
+	if hand_is_empty():
+		return
+	var pet = hand.get_child(0)
+	var gpos = pet.global_position
+	pet.get_parent().remove_child(pet)
+	pet.position = gpos
+	pet.velocity = velocity
+	pet.drop()
+	(func(): get_parent().add_child(pet)).call_deferred()
+	
+
+func hand_is_empty() -> bool:
+	return hand.get_child_count() == 0
+
+func _on_grabbox_body_entered(body):
+	if body.is_in_group("pets"):
+		if player_state == MoveState.stun:
+			return
+		var pet = body
+		# Empty hand and player is higher than pet
+		print(feet.global_position.y, '<', pet.feet.global_position.y)
+		if hand_is_empty() and feet.global_position.y < pet.feet.global_position.y:
+			pet.get_parent().remove_child(pet)
+			pet.pick_up()
+			pet.position = Vector2.ZERO
+			(func(): hand.add_child(pet)).call_deferred()
+		else:
+			pet.dodge();

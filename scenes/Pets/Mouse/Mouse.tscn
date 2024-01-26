@@ -1,14 +1,32 @@
-[gd_scene load_steps=3 format=3 uid="uid://ckybk2trj1vee"]
+[gd_scene load_steps=6 format=3 uid="uid://ckybk2trj1vee"]
 
-[ext_resource type="Script" path="res://scenes/Pets/Pet.gd" id="1_yjn77"]
-[ext_resource type="Texture2D" uid="uid://yqeb8eaex8nd" path="res://Untitled.png" id="2_icqyc"]
+[ext_resource type="Script" path="res://scenes/Pets/Mouse/Mouse.gd" id="1_lruqw"]
+[ext_resource type="Texture2D" uid="uid://s5mxy6purhlu" path="res://scenes/Pets/Mouse/mouse_01.png" id="2_r6eno"]
 
-[node name="Mouse" type="RigidBody2D"]
-script = ExtResource("1_yjn77")
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3kc0y"]
+size = Vector2(9, 9)
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-polygon = PackedVector2Array(39, -29, 31, -26, 3, -29, -24, -18, -29, 10, -28, 34, -23, 34, -23, 19, -19, 8, -17, 21, -17, 38, -14, 39, -11, 36, -11, 20, -8, -7, 34, -20, 43, -21, 42, -24, 33, -23, 40, -27)
+[sub_resource type="AtlasTexture" id="AtlasTexture_fb7a4"]
+atlas = ExtResource("2_r6eno")
+region = Rect2(0, 0, 27, 27)
 
-[node name="Untitled" type="Sprite2D" parent="."]
-scale = Vector2(0.15, 0.15)
-texture = ExtResource("2_icqyc")
+[sub_resource type="AtlasTexture" id="AtlasTexture_ak85h"]
+atlas = ExtResource("2_r6eno")
+region = Rect2(27, 0, 27, 27)
+
+[node name="Mouse" type="CharacterBody2D"]
+collision_layer = 4
+script = ExtResource("1_lruqw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_3kc0y")
+
+[node name="SpriteLimbs" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_fb7a4")
+
+[node name="SpriteNoLimbs" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("AtlasTexture_ak85h")
+
+[node name="Feet" type="Node2D" parent="."]
+position = Vector2(0, 5)

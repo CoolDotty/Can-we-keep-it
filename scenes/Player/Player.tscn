@@ -1,7 +1,6 @@
-[gd_scene load_steps=15 format=3 uid="uid://rwjo72v4gsim"]
+[gd_scene load_steps=14 format=3 uid="uid://rwjo72v4gsim"]
 
 [ext_resource type="Script" path="res://scenes/Player/Player.gd" id="1_ynfev"]
-[ext_resource type="Script" path="res://addons/FollowParent/FollowParent2D/FollowParent2D.gd" id="2_n4u13"]
 [ext_resource type="Shader" path="res://scripts/Outline.gdshader" id="3_1j4ee"]
 [ext_resource type="Texture2D" uid="uid://bd11npa3k70si" path="res://scenes/Player/plop_run.png" id="4_52fsi"]
 
@@ -82,19 +81,21 @@ script = ExtResource("1_ynfev")
 position = Vector2(0, -1)
 shape = SubResource("RectangleShape2D_y01nk")
 
-[node name="FollowParent2D" type="Node2D" parent="."]
-top_level = true
-script = ExtResource("2_n4u13")
-lerp_speed = 100.0
-
-[node name="Player" type="AnimatedSprite2D" parent="FollowParent2D"]
+[node name="Player" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_2mjv4")
 sprite_frames = SubResource("SpriteFrames_mjjow")
 animation = &"Turbo"
 
-[node name="Hand" type="Node2D" parent="FollowParent2D/Player"]
+[node name="Hand" type="Node2D" parent="Player"]
 z_index = 1
 position = Vector2(-13, 0)
+
+[node name="PlaceChecker" type="Area2D" parent="Player/Hand"]
+collision_layer = 0
+collision_mask = 12
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Player/Hand/PlaceChecker"]
+polygon = PackedVector2Array(0, 0, 0, 0, 0, 0)
 
 [node name="JumpHoldTimer" type="Timer" parent="."]
 wait_time = 0.5

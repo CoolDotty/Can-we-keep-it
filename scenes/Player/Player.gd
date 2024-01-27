@@ -26,16 +26,21 @@ var player_state = MoveState.falling
 @export var jump_strength 	= -400
 @export var grav_normal		=  980 #normal gravity, like when move off a ledge
 @export var grav_on_jump 	=  980 #project settings = 980
-@export var grav_on_fall 	=  980 * 2 #increase grav on release jump button
+@export var grav_on_fall 	=  980 * 2 #increase grav on rWelease jump button
 @export var max_fall_speed  =  800
 
 @onready var jump_hold_timer = $JumpHoldTimer
 @onready var turbo_timer = $TurboTimer
 @onready var stun_timer = $StunTimer
-@onready var player_sprite = $FollowParent2D/Player
-@onready var hand = $FollowParent2D/Player/Hand
+@onready var player_sprite = $Player
+@onready var hand = $Player/Hand
 @onready var feet = $Feet
 @onready var grabbox = $Grabbox
+@onready var place_checker = $Player/Hand/PlaceChecker
+@onready var place_checker_collision = $Player/Hand/PlaceChecker/CollisionPolygon2D
+
+var is_place_mode = false
+var held = null
 
 
 var direction = 1
@@ -92,10 +97,62 @@ func _process(delta):
 			player_sprite.speed_scale = -1
 			player_sprite.frame = 1
 			player_sprite.rotation_degrees = 90
-	
 
 #PHYSICS STEP
 func _physics_process(delta):
+	# every frame place mode
+	if is_place_mode:
+		var axis = Vector2(Input.get_axis("move_left", "move_right"), Input.get_axis("move_up", "move_down"))
+		if Input.is_action_just_pressed("move_left"): hand.position.x -= 9
+		if Input.is_action_just_pressed("move_right"): hand.position.x += 9
+		if Input.is_action_just_pressed("move_up"): hand.position.y -= 9
+		if Input.is_action_just_pressed("move_down"): hand.position.y += 9
+
+		var edge = false
+		var inside = false
+		var occupied = false
+		var closet = null
+		for area in place_checker.get_overlapping_areas():
+			if area.name == "EdgeChecker":
+				edge = true
+			if area.name == "InsideChecker":
+				inside = true
+				closet = area.owner
+			if area.is_in_group("pets"):
+				pass # IDK LOL
+		
+		var can_put_in_closet = not occupied and inside and not edge
+		var can_drop = not inside and not edge
+		
+		if can_put_in_closet:
+			held.modulate = Color(1, 1, 1, 1.0)
+		elif can_drop:
+			held.modulate = Color(1, 1, 1, 0.5)
+		else:
+			held.modulate = Color(1, 0, 0, 0.9)
+		
+		if Input.is_action_just_pressed("place_mode") and is_place_mode:
+			is_place_mode = false
+			
+			if can_put_in_closet:
+				place_hand(closet)
+				
+			# on exit placing mode
+			hand.position = Vector2(-13, 0) # HACK, default value
+			hand.top_level = false
+			place_checker.visible = false
+		return
+	
+	if Input.is_action_just_pressed("place_mode") and not is_place_mode and is_instance_valid(held):
+		is_place_mode = true
+		# on enter place mode
+		if is_place_mode:
+			hand.top_level = true
+			hand.position = ((self.global_position / 9).floor() * 9) + Vector2(5, -4)
+			place_checker.visible = true
+			var pet_poly = held.find_child("CollisionPolygon2D").polygon
+			place_checker_collision.polygon = pet_poly
+	
 	#friction check
 	
 	if velocity.x < 0:
@@ -127,22 +184,6 @@ func _physics_process(delta):
 			falling(delta, is_entering_new_state)
 		MoveState.stun:
 			on_stun(delta, is_entering_new_state)
-	
-	if Input.is_action_pressed("place"):
-		if hand_is_empty():
-			return
-		
-		var areas = grabbox.get_overlapping_areas()
-		var closet = null
-		for a in areas:
-			if a.get("is_closet"):
-				closet = a
-				break;
-		
-		if is_instance_valid(closet):
-			pass
-		else:
-			drop_hand()
 	
 	if is_entering_new_state:
 		prev_player_state = player_state
@@ -437,17 +478,29 @@ func on_stun(delta, isEntering: bool) -> void:
 func drop_hand():
 	if hand_is_empty():
 		return
-	var pet = hand.get_child(0)
+	var pet = held
 	var gpos = pet.global_position
 	pet.get_parent().remove_child(pet)
 	pet.position = gpos
 	pet.velocity = velocity
 	pet.drop()
 	(func(): get_parent().add_child(pet)).call_deferred()
-	
+	held = null
+
+func place_hand(closet):
+	if hand_is_empty():
+		return
+	var pet = held
+	var gpos = pet.global_position
+	pet.get_parent().remove_child(pet)
+	pet.position = gpos
+	pet.modulate = Color.WHITE
+	pet.place()
+	(func(): get_parent().add_child(pet)).call_deferred()
+	held = null
 
 func hand_is_empty() -> bool:
-	return hand.get_child_count() == 0
+	return held == null
 
 func _on_grabbox_body_entered(body):
 	if body.is_in_group("pets"):
@@ -460,5 +513,6 @@ func _on_grabbox_body_entered(body):
 			pet.pick_up()
 			pet.position = Vector2.ZERO
 			(func(): hand.add_child(pet)).call_deferred()
+			held = pet
 		else:
 			pet.dodge();

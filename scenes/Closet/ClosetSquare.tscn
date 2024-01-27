@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://dqrmhmbd775ey"]
+
+[ext_resource type="Texture2D" uid="uid://ctldrsi8ddf4j" path="res://assets/gridpoint.png" id="1_2n60t"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iy3fb"]
+size = Vector2(9, 9)
+
+[node name="Closet" type="Area2D"]
+z_index = -1
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_iy3fb")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_2n60t")

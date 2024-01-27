@@ -11,23 +11,24 @@ var prev_player_state = null
 var player_state = MoveState.falling
 
 #jump and move vars [g]round [a]ir
-@export var g_top_speed		= 500
+@export var g_top_speed		= 90
 @export var g_jog_speed		= 60
 @export var g_turbo_multiplier = 6
-@export var g_forward_speed =  1
+@export var g_forward_speed =  5
 @export var g_reverse_speed =  10
-@export var g_decel 		=  5 #ground friction
+@export var g_decel 		=  10 #ground friction
 
-@export var a_top_speed 	=  100
+@export var a_top_speed 	=  500
 @export var a_forward_speed =  5
 @export var a_reverse_speed =  5
 @export var a_decel 		=  3 #air friction
 
-@export var jump_strength 	= -400
-@export var grav_normal		=  980 #normal gravity, like when move off a ledge
-@export var grav_on_jump 	=  980 #project settings = 980
-@export var grav_on_fall 	=  980 * 2 #increase grav on release jump button
-@export var max_fall_speed  =  800
+@export var jump_strength 	= -250
+@export var running_jump    = -50
+@export var grav_normal		=  900 #normal gravity, like when move off a ledge
+@export var grav_on_jump 	=  900/2 #project settings = 980
+@export var grav_on_fall 	=  6000 #increase grav on release jump button
+@export var max_fall_speed  =  300
 
 @onready var jump_hold_timer = $JumpHoldTimer
 @onready var turbo_timer = $TurboTimer
@@ -37,9 +38,11 @@ var player_state = MoveState.falling
 @onready var feet = $Feet
 @onready var grabbox = $Grabbox
 
-
+var grounded = true
 var direction = 1
+var is_jumping = false
 
+#animation
 func _process(delta):
 	match player_state:
 		MoveState.idle:
@@ -96,38 +99,95 @@ func _process(delta):
 
 #PHYSICS STEP
 func _physics_process(delta):
-	#friction check
+	#binding facing to inputs instead
+	#if velocity.x < 0:
+		#direction = -1
+	#if velocity.x > 0:
+		#direction = 1
 	
-	if velocity.x < 0:
-		direction = -1
-	if velocity.x > 0:
-		direction = 1
+	#run animation - switch to accell or input flags later?
 	if abs(velocity.x) > 0:
 		player_sprite.play()
 	else:
 		player_sprite.stop()
 	
+	#START OF NEW STUFF (movement ver.2) ##########################################################
+	
+	#HORIZONTAL MOVEMENT
+	#region
+	#move left and right
+	var towards = Input.get_axis("move_left","move_right")
+	#change direction
+	if towards>0 : 
+		direction = 1
+	elif towards<0 : 
+		direction = -1
+
+	#apply fricton
+	if towards == 0 :
+		velocity.x = move_toward(velocity.x,0,g_decel)
+		if is_on_floor(): player_state = MoveState.idle
+	#accellerate
+	else :
+		var accel = 0
+		if direction == towards: accel = g_forward_speed
+		else : accel = g_reverse_speed 
+		velocity.x = move_toward(velocity.x, g_top_speed*towards,accel)
+		if is_on_floor(): player_state = MoveState.jogging
+	#endregion
+	
+	#VERTICAL MOVEMENT - FALLING & JUMPING
+	
+	#falling
+	#region
+	if not is_on_floor() :
+		velocity.y = move_toward(velocity.y, max_fall_speed, grav_normal*delta)
+	
+	#end_region
+	
+	#region
+	is_jumping = false
+	var ups  = (abs(velocity.x)/g_top_speed)*running_jump + jump_strength
+	if Input.is_action_just_pressed("jump") and is_on_floor() :
+		#running start
+		#var ups  = (abs(velocity.x)/g_top_speed)*running_jump + jump_strength
+		is_jumping = true
+		velocity.y = ups
+		player_state = MoveState.jumping
+	# check for early release - short hop
+	if Input.is_action_just_released("jump") and velocity.y<0:
+		#calculate fall grav porportioinal to jump height/ jump strength velocity
+		var fall_grav = abs(velocity.y)/abs(ups)
+		velocity.y = move_toward(velocity.y, max_fall_speed, grav_on_fall*delta*fall_grav)
+		is_jumping = false
+		player_state = MoveState.falling
+			
+	#endregion
+	
+	move_and_slide()
+	
 	$DEBUG.text = MoveState.keys()[player_state]
 	
-	var is_entering_new_state = player_state != prev_player_state
-	
+	#Don't know what this means, (help) - kelvin
+	#var is_entering_new_state = player_state != prev_player_state
 	#check state
-	match player_state:
-		MoveState.idle:
-			on_idle(delta, is_entering_new_state)
-		MoveState.jogging:
-			on_jogging(delta, is_entering_new_state)
-		MoveState.turbo:
-			on_turbo(delta, is_entering_new_state)
-		MoveState.skidding:
-			on_skidding(delta, is_entering_new_state)
-		MoveState.jumping:
-			jumping(delta, is_entering_new_state)
-		MoveState.falling:
-			falling(delta, is_entering_new_state)
-		MoveState.stun:
-			on_stun(delta, is_entering_new_state)
+	#match player_state:
+		#MoveState.idle:
+			#on_idle(delta, is_entering_new_state)
+		#MoveState.jogging:
+			#on_jogging(delta, is_entering_new_state)
+		#MoveState.turbo:
+			#on_turbo(delta, is_entering_new_state)
+		#MoveState.skidding:
+			#on_skidding(delta, is_entering_new_state)
+		#MoveState.jumping:
+			#jumping(delta, is_entering_new_state)
+		#MoveState.falling:
+			#falling(delta, is_entering_new_state)
+		#MoveState.stun:
+			#on_stun(delta, is_entering_new_state)
 	
+	#closet stuff ( is [z] )
 	if Input.is_action_pressed("place"):
 		if hand_is_empty():
 			return
@@ -144,9 +204,9 @@ func _physics_process(delta):
 		else:
 			drop_hand()
 	
-	if is_entering_new_state:
-		prev_player_state = player_state
-		#print(MoveState.keys()[player_state])
+	#if is_entering_new_state:
+		#prev_player_state = player_state
+		##print(MoveState.keys()[player_state])
 
 
 func on_ground(delta, isEntering: bool) -> void:
@@ -194,6 +254,8 @@ func on_ground(delta, isEntering: bool) -> void:
 	
 
 func on_idle(delta, isEntering: bool) -> void:
+	#velocity.x = move_toward(velocity.x, 0, g_decel)
+	
 	if (isEntering):
 		pass
 	
@@ -232,8 +294,7 @@ func on_jogging(delta, isEntering: bool) -> void:
 		const minimum_starting_velocity = 1
 		var d = sign(velocity.x)
 		velocity.x = d * max(abs(velocity.x), minimum_starting_velocity)
-		
-		turbo_timer.start()
+		#turbo_timer.start()
 	
 	if Input.is_action_just_pressed("jump"):
 		player_state = MoveState.jumping
@@ -245,20 +306,26 @@ func on_jogging(delta, isEntering: bool) -> void:
 	var is_going_left = velocity.x < 0
 	
 	if is_wish_right:
-		if is_going_right:
+		#if is_going_right:
 			velocity.x = min(velocity.x + g_forward_speed, g_jog_speed)
-		else:
-			player_state = MoveState.skidding
-			return
+			direction = 1
+		#skidding  - removed
+		#else:
+			#player_state = MoveState.skidding
+			#return
 	elif is_wish_left:
-		if is_going_left:
+		#if is_going_left:
 			velocity.x = max(velocity.x + -1 * g_forward_speed, -1 * g_jog_speed)
-		else:
-			player_state = MoveState.skidding
-			return
+			direction = -1
 	else:
-		player_state = MoveState.skidding
-		return
+		velocity.x = move_toward(velocity.x, 0, g_decel)
+		#skiddint - removed
+		#else:
+			#player_state = MoveState.skidding
+			#return
+	#else:
+		#player_state = MoveState.skidding
+		#return
 	
 	move_and_slide()
 	
@@ -274,9 +341,9 @@ func on_jogging(delta, isEntering: bool) -> void:
 		player_state = MoveState.falling
 		return
 	
-	if turbo_timer.is_stopped():
-		player_state = MoveState.turbo
-		return
+	#if turbo_timer.is_stopped():
+		#player_state = MoveState.turbo
+		#return
 
 
 func on_turbo(delta, isEntering: bool) -> void:

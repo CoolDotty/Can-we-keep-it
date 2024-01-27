@@ -6,10 +6,16 @@ extends CharacterBody2D
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 #var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
+#Initiate Variables
+#region
+#states and animation - (no longer used for locomotion)
 enum MoveState { idle, jogging, skidding, turbo, jumping, falling, fast_fall, coyote_time, stun}
 var prev_player_state = null
 var player_state = MoveState.falling
 
+#actions
+@export var throw_strength_x = 100
+@export var throw_strength_y = -100
 #jump and move vars [g]round [a]ir
 @export var g_top_speed		= 90
 @export var g_jog_speed		= 60
@@ -40,12 +46,16 @@ var player_state = MoveState.falling
 @onready var place_checker = $Player/Hand/PlaceChecker
 @onready var place_checker_collision = $Player/Hand/PlaceChecker/CollisionPolygon2D
 
+#grabby droppy
 var is_place_mode = false
 var held = null
 
+#switches
 var grounded = true
 var direction = 1
 var is_jumping = false
+var grab = false
+#endregion
 
 #animation
 func _process(delta):
@@ -103,49 +113,53 @@ func _process(delta):
 
 #PHYSICS STEP
 func _physics_process(delta):
-	# every frame place mode
-	if is_place_mode:
-		var axis = Vector2(Input.get_axis("move_left", "move_right"), Input.get_axis("move_up", "move_down"))
-		if Input.is_action_just_pressed("move_left"): hand.position.x -= 9
-		if Input.is_action_just_pressed("move_right"): hand.position.x += 9
-		if Input.is_action_just_pressed("move_up"): hand.position.y -= 9
-		if Input.is_action_just_pressed("move_down"): hand.position.y += 9
-
-		var edge = false
-		var inside = false
-		var occupied = false
-		var closet = null
-		for area in place_checker.get_overlapping_areas():
-			if area.name == "EdgeChecker":
-				edge = true
-			if area.name == "InsideChecker":
-				inside = true
-				closet = area.owner
-			if area.is_in_group("pets"):
-				pass # IDK LOL
-		
-		var can_put_in_closet = not occupied and inside and not edge
-		var can_drop = not inside and not edge
-		
-		if can_put_in_closet:
-			held.modulate = Color(1, 1, 1, 1.0)
-		elif can_drop:
-			held.modulate = Color(1, 1, 1, 0.5)
-		else:
-			held.modulate = Color(1, 0, 0, 0.9)
-		
-		if Input.is_action_just_pressed("place_mode") and is_place_mode:
-			is_place_mode = false
-			
-			if can_put_in_closet:
-				place_hand(closet)
-				
-			# on exit placing mode
-			hand.position = Vector2(-13, 0) # HACK, default value
-			hand.top_level = false
-			place_checker.visible = false
-		return
+	# every frame place mode - is this the phycokenetic thing?
+	#region
 	
+	#phyco-kenetic-pickup and drop? removed beceuse of conflict with normal pick up ad drop
+	if is_place_mode:
+		#var axis = Vector2(Input.get_axis("move_left", "move_right"), Input.get_axis("move_up", "move_down"))
+		#if Input.is_action_just_pressed("move_left"): hand.position.x -= 9
+		#if Input.is_action_just_pressed("move_right"): hand.position.x += 9
+		#if Input.is_action_just_pressed("move_up"): hand.position.y -= 9
+		#if Input.is_action_just_pressed("move_down"): hand.position.y += 9
+#
+		#var edge = false
+		#var inside = false
+		#var occupied = false
+		#var closet = null
+		#for area in place_checker.get_overlapping_areas():
+			#if area.name == "EdgeChecker":
+				#edge = true
+			#if area.name == "InsideChecker":
+				#inside = true
+				#closet = area.owner
+			#if area.is_in_group("pets"):
+				#pass # IDK LOL
+		#
+		#var can_put_in_closet = not occupied and inside and not edge
+		#var can_drop = not inside and not edge
+		#
+		#if can_put_in_closet:
+			#held.modulate = Color(1, 1, 1, 1.0)
+		#elif can_drop:
+			#held.modulate = Color(1, 1, 1, 0.5)
+		#else:
+			#held.modulate = Color(1, 0, 0, 0.9)
+		#
+		#if Input.is_action_just_pressed("place_mode") and is_place_mode:
+			#is_place_mode = false
+			#
+			#if can_put_in_closet:
+				#place_hand(closet)
+				#
+			## on exit placing mode
+			#hand.position = Vector2(-13, 0) # HACK, default value
+			#hand.top_level = false
+			#place_checker.visible = false
+		#return
+		pass
+		
 	if Input.is_action_just_pressed("place_mode") and not is_place_mode and is_instance_valid(held):
 		is_place_mode = true
 		# on enter place mode
@@ -155,8 +169,7 @@ func _physics_process(delta):
 			place_checker.visible = true
 			var pet_poly = held.find_child("CollisionPolygon2D").polygon
 			place_checker_collision.polygon = pet_poly
-	
-	#friction check
+	#endregion
 	
 	#run animation - switch to accell or input flags later?
 	if abs(velocity.x) > 0:
@@ -166,15 +179,42 @@ func _physics_process(delta):
 	
 	#START OF NEW STUFF (movement ver.2) ##########################################################
 	
+	#GRAB AND RELEASE
+	#region
+	if Input.is_action_just_pressed("place"):
+		grab = true
+	if Input.is_action_just_released("place"):
+		drop_hand()
+		grab = false
+		
+	if grab:
+		print("boop")
+		var pets = grabbox.get_overlapping_bodies().filter(func(b): return b.is_in_group("pets"))
+		print(pets)
+		var pet = pets.pop_back()
+		if is_instance_valid(pet):
+			pet.get_parent().remove_child(pet)
+			pet.pick_up()
+			pet.position = Vector2.ZERO
+			(func(): hand.add_child(pet)).call_deferred()
+			held = pet
+				
+	
+	#endregion
+	
+	
 	#HORIZONTAL MOVEMENT
 	#region
 	#move left and right
 	var towards = Input.get_axis("move_left","move_right")
 	#change direction
+	var grab_box = $Grabbox
 	if towards>0 : 
 		direction = 1
+		grab_box.position = Vector2(7,0)
 	elif towards<0 : 
 		direction = -1
+		grab_box.position = Vector2(-7,0)
 
 	#apply fricton
 	if towards == 0 :
@@ -190,15 +230,11 @@ func _physics_process(delta):
 	#endregion
 	
 	#VERTICAL MOVEMENT - FALLING & JUMPING
-	
-	#falling
 	#region
+	#apply gravity
 	if not is_on_floor() :
 		velocity.y = move_toward(velocity.y, max_fall_speed, grav_normal*delta)
-	
-	#end_region
-	
-	#region
+	#jumping
 	is_jumping = false
 	var ups  = (abs(velocity.x)/g_top_speed)*running_jump + jump_strength
 	if Input.is_action_just_pressed("jump") and is_on_floor() :
@@ -211,16 +247,19 @@ func _physics_process(delta):
 	if Input.is_action_just_released("jump") and velocity.y<0:
 		#calculate fall grav porportioinal to jump height/ jump strength velocity
 		var fall_grav = abs(velocity.y)/abs(ups)
+		#var fall_grav = (velocity.y*velocity.y) /abs(ups)
 		velocity.y = move_toward(velocity.y, max_fall_speed, grav_on_fall*delta*fall_grav)
 		is_jumping = false
 		player_state = MoveState.falling
 			
 	#endregion
 	
+	#apply physics!!
 	move_and_slide()
-	
+	#print player state - debug
 	$DEBUG.text = MoveState.keys()[player_state]
 	
+	#locomotive states, no longer used
 	#Don't know what this means, (help) - kelvin
 	#var is_entering_new_state = player_state != prev_player_state
 	#check state
@@ -241,21 +280,21 @@ func _physics_process(delta):
 			#on_stun(delta, is_entering_new_state)
 	
 	#closet stuff ( is [z] )
-	if Input.is_action_pressed("place"):
-		if hand_is_empty():
-			return
+	#if Input.is_action_pressed("place"):
+		#if hand_is_empty():
+			#return
 		
-		var areas = grabbox.get_overlapping_areas()
-		var closet = null
-		for a in areas:
-			if a.get("is_closet"):
-				closet = a
-				break;
-		
-		if is_instance_valid(closet):
-			pass
-		else:
-			drop_hand()
+		#var areas = grabbox.get_overlapping_areas()
+		#var closet = null
+		#for a in areas:
+			#if a.get("is_closet"):
+				#closet = a
+				#break;
+		#
+		#if is_instance_valid(closet):
+			#pass
+		#else:
+			#drop_hand()
 	
 	#if is_entering_new_state:
 		#prev_player_state = player_state
@@ -561,7 +600,17 @@ func drop_hand():
 	var gpos = pet.global_position
 	pet.get_parent().remove_child(pet)
 	pet.position = gpos
-	pet.velocity = velocity
+	
+	var throw_mod_x = 300 *direction
+	var throw_mod_y = -200
+	if Input.is_action_pressed("move_down"):
+		throw_mod_x = 0
+		throw_mod_y = 0
+	if Input.is_action_pressed("up"): 
+		throw_mod_y = throw_strength_y
+	
+	pet.velocity.x = velocity.x +throw_mod_x
+	pet.velocity.y = velocity.y +throw_mod_y
 	pet.drop()
 	(func(): get_parent().add_child(pet)).call_deferred()
 	held = null
@@ -581,17 +630,18 @@ func place_hand(closet):
 func hand_is_empty() -> bool:
 	return held == null
 
-func _on_grabbox_body_entered(body):
-	if body.is_in_group("pets"):
-		if player_state == MoveState.stun:
-			return
-		var pet = body
-		# Empty hand and player is higher than pet
-		if hand_is_empty() and feet.global_position.y < pet.feet.global_position.y:
-			pet.get_parent().remove_child(pet)
-			pet.pick_up()
-			pet.position = Vector2.ZERO
-			(func(): hand.add_child(pet)).call_deferred()
-			held = pet
-		else:
-			pet.dodge();
+#func _on_grabbox_body_entered(body):
+	#if body.is_in_group("pets") and grab:
+		#if player_state == MoveState.stun:
+			#return
+		#var pet = body
+		## Empty hand and player is higher than pet
+		##if hand_is_empty() and feet.global_position.y < pet.feet.global_position.y:
+		#if hand_is_empty() :
+			#pet.get_parent().remove_child(pet)
+			#pet.pick_up()
+			#pet.position = Vector2.ZERO
+			#(func(): hand.add_child(pet)).call_deferred()
+			#held = pet
+		#else:
+			#pet.dodge();

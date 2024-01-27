@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
-
+#Initiate Variables
+#region
 @export var species: String
 @export var nickname: String
 
@@ -25,15 +26,17 @@ var panic = 0
 var fidget_dir: int = 0
 
 var _disabled = false
-
-
+#endregion
+#??? - kelvin
 func _ready():
 	self.add_to_group("pets")
 
 
 func _physics_process(delta):
+	#stop if disabled
 	if _disabled:
 		return
+	
 	
 	if velocity.x > 0:
 		sprite_limbs.scale.x = -1
@@ -70,6 +73,8 @@ func dodge():
 
 func drop():
 	_disabled = false
+	fidget_dir = 0
+	#fidget_timer.start(10)
 	(func(): collision_polygon_2d.disabled = false).call_deferred()
 
 func place():

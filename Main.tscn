@@ -44,7 +44,7 @@ shape = SubResource("RectangleShape2D_f7rgl")
 focus = NodePath("../Player")
 
 [node name="Mouse" parent="." instance=ExtResource("4_tiwio")]
-position = Vector2(302, 300)
+position = Vector2(282, 306)
 
 [node name="Mouse2" parent="." instance=ExtResource("4_tiwio")]
 position = Vector2(-547, 300)

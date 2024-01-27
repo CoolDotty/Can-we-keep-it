@@ -42,6 +42,11 @@ region = Rect2(135, 0, 27, 36)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_mjjow"]
 animations = [{
+"frames": [],
+"loop": true,
+"name": &"Kick",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ikbr5")
@@ -86,7 +91,6 @@ lerp_speed = 100.0
 material = SubResource("ShaderMaterial_2mjv4")
 sprite_frames = SubResource("SpriteFrames_mjjow")
 animation = &"Turbo"
-frame_progress = 0.153492
 
 [node name="Hand" type="Node2D" parent="FollowParent2D/Player"]
 z_index = 1

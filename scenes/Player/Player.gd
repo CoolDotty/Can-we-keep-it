@@ -35,6 +35,7 @@ var player_state = MoveState.falling
 @onready var player_sprite = $FollowParent2D/Player
 @onready var hand = $FollowParent2D/Player/Hand
 @onready var feet = $Feet
+@onready var grabbox = $Grabbox
 
 
 var direction = 1
@@ -126,6 +127,22 @@ func _physics_process(delta):
 			falling(delta, is_entering_new_state)
 		MoveState.stun:
 			on_stun(delta, is_entering_new_state)
+	
+	if Input.is_action_pressed("place"):
+		if hand_is_empty():
+			return
+		
+		var areas = grabbox.get_overlapping_areas()
+		var closet = null
+		for a in areas:
+			if a.get("is_closet"):
+				closet = a
+				break;
+		
+		if is_instance_valid(closet):
+			pass
+		else:
+			drop_hand()
 	
 	if is_entering_new_state:
 		prev_player_state = player_state

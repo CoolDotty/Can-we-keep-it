@@ -68,7 +68,8 @@ func _process(delta):
 	if _disabled:
 		var a = randi_range(0, 500)
 		if a == 0:
-			panic_player.play()
+			pass
+			#panic_player.play()
 		return
 
 #step

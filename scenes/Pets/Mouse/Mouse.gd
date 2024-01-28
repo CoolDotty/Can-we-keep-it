@@ -8,7 +8,7 @@ extends Pet
 
 @export var g_top_speed		= 100
 @export var g_accel 		= 150
-@export var g_decel 		= 100 #ground friction
+#@export var g_decel 		= 100 #ground friction
 
 @export var a_decel 		=  3 #air friction
 

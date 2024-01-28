@@ -634,7 +634,7 @@ func drop_hand():
 	pet.get_parent().remove_child(pet)
 	pet.position = gpos
 	
-	var throw_mod_x = 2000000000000000
+	var throw_mod_x = 100
 	var throw_mod_y = -150
 	if Input.is_action_pressed("move_down"):
 		throw_mod_x = 25

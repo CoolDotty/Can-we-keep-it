@@ -4,3 +4,5 @@ extends Pet
 func _physics_process(delta):
 	if _disabled:
 		return
+	super(delta)
+	grav_on = true

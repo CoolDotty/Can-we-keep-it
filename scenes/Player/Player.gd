@@ -131,17 +131,15 @@ func _process(delta):
 #PHYSICS STEP
 func _physics_process(delta):
 	#unstucl
-	print(stuck_check.get_overlapping_bodies())
-	#var walls = stuck_check.get_overlapping_bodies().filter(func(b): return not b.get_child(0).one_way_collision)
-	var walls = stuck_check.get_overlapping_bodies().filter(func(b): 
-		var collision_shape = b.get_child(0)
-		if (is_instance_valid(collision_shape)):
-			return not b.get_child(0).one_way_collision
-		else :
-			# inside tilemap. We are stuck :(
-			return true
-			)
-	
+	var walls = stuck_check.get_overlapping_bodies().filter(
+		func(b): 
+			var collision_shape = b.get_child(0)
+			if (is_instance_valid(collision_shape)):
+				return not b.get_child(0).one_way_collision
+			else:
+				# inside tilemap. We are stuck :(
+				return true
+	)
 	if walls.size() > 0:
 		position = was_at
 	else:

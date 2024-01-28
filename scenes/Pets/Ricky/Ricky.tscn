@@ -1,7 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://ctsudgblrxpdu"]
+[gd_scene load_steps=7 format=3 uid="uid://ctsudgblrxpdu"]
 
 [ext_resource type="Script" path="res://scenes/Pets/Ricky/Rickey.gd" id="1_fclwf"]
 [ext_resource type="Texture2D" uid="uid://djvk4v1hhcp52" path="res://scenes/Pets/Ricky/ricky_01.png" id="1_y6u1x"]
+[ext_resource type="AudioStream" uid="uid://c12lmj2pe0ad0" path="res://assets/petsounds/handneonyellow.wav" id="2_ainbx"]
+[ext_resource type="AudioStream" uid="uid://dyrsen8kcsw3m" path="res://assets/petsounds/dropneonyellow.wav" id="3_3mrlo"]
+[ext_resource type="AudioStream" uid="uid://c47j060hrg7k1" path="res://assets/petsounds/grabneonyellow.wav" id="4_x2sf3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4mxot"]
 atlas = ExtResource("1_y6u1x")
@@ -11,6 +14,10 @@ region = Rect2(0, 0, 36, 45)
 collision_layer = 4
 collision_mask = 5
 script = ExtResource("1_fclwf")
+idle_noise = ExtResource("2_ainbx")
+drop_noise = ExtResource("3_3mrlo")
+grab_noise = ExtResource("4_x2sf3")
+panic_noise = ExtResource("2_ainbx")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(-9, -14, 0, -14, 0, -5, 9, -5, 9, 13, 0, 13, 0, 4, -9, 4)

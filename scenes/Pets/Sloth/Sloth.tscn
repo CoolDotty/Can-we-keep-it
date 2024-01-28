@@ -1,7 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://cmtfmbrho8pl5"]
+[gd_scene load_steps=8 format=3 uid="uid://cmtfmbrho8pl5"]
 
 [ext_resource type="Script" path="res://scenes/Pets/Sloth/Sloth.gd" id="1_7uci6"]
 [ext_resource type="Texture2D" uid="uid://diy5e8dr4n7tr" path="res://scenes/Pets/Sloth/sloth.png" id="1_higdt"]
+[ext_resource type="AudioStream" uid="uid://cu1sl2oj012df" path="res://assets/petsounds/sloth1.wav" id="2_nrmij"]
+[ext_resource type="AudioStream" uid="uid://dc2cl0j42x5cc" path="res://assets/petsounds/dropsloth.wav" id="3_av4jf"]
+[ext_resource type="AudioStream" uid="uid://cmnu3uci13sp7" path="res://assets/petsounds/grabsloth.wav" id="4_kpaiu"]
+[ext_resource type="AudioStream" uid="uid://bibhwd0v7hulg" path="res://assets/petsounds/handsloth.wav" id="5_k10xx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hnt4f"]
 atlas = ExtResource("1_higdt")
@@ -11,6 +15,10 @@ region = Rect2(0, 0, 36, 27)
 collision_layer = 4
 collision_mask = 5
 script = ExtResource("1_7uci6")
+idle_noise = ExtResource("2_nrmij")
+drop_noise = ExtResource("3_av4jf")
+grab_noise = ExtResource("4_kpaiu")
+panic_noise = ExtResource("5_k10xx")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(-16, 0, -4, 0, -4, -9, 5, -9, 5, 0, 16, 0, 16, 13, -16, 13)

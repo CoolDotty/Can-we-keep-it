@@ -1,7 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://bi7r7g3nuh6cu"]
+[gd_scene load_steps=7 format=3 uid="uid://bi7r7g3nuh6cu"]
 
 [ext_resource type="Script" path="res://scenes/Pets/Fred/Fred.gd" id="1_0rvoh"]
+[ext_resource type="AudioStream" uid="uid://rr0sl8q2gd6x" path="res://assets/petsounds/handneonpurple.wav" id="2_4irm6"]
 [ext_resource type="Texture2D" uid="uid://bv8n6pacx7im4" path="res://scenes/Pets/Fred/fred_01.png" id="2_is3us"]
+[ext_resource type="AudioStream" uid="uid://dg7ph2wbawaa3" path="res://assets/petsounds/dropneonpurple.wav" id="3_a81vd"]
+[ext_resource type="AudioStream" uid="uid://bcfyf2hukpkpu" path="res://assets/petsounds/grabneonpurple.wav" id="4_gy18d"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6rn2c"]
 atlas = ExtResource("2_is3us")
@@ -11,6 +14,10 @@ region = Rect2(0, 0, 45, 36)
 collision_layer = 4
 collision_mask = 5
 script = ExtResource("1_0rvoh")
+idle_noise = ExtResource("2_4irm6")
+drop_noise = ExtResource("3_a81vd")
+grab_noise = ExtResource("4_gy18d")
+panic_noise = ExtResource("2_4irm6")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(-14, -9, 4, -9, 4, 0, 13, 0, 13, 9, -5, 9, -5, 0, -14, 0)

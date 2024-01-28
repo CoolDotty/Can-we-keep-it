@@ -9,6 +9,10 @@ class_name Pet
 @export var drop_noise: AudioStream
 @export var grab_noise: AudioStream
 @export var panic_noise: AudioStream
+var idle_player: AudioStreamPlayer
+var drop_player: AudioStreamPlayer 
+var grab_player: AudioStreamPlayer 
+var panic_player:AudioStreamPlayer 
 
 
 @onready var sprite_limbs = $SpriteLimbs
@@ -20,11 +24,6 @@ func _audio_register(name):
 	a.name = name
 	add_child(a)
 	return a
-
-@onready var idle_player = _audio_register("IdlePlayer")
-@onready var drop_player = _audio_register("DropPlayer")
-@onready var grab_player = _audio_register("GrabPlayer")
-@onready var panic_player = _audio_register("PanicPlayer")
 
 var _disabled = false
 
@@ -44,12 +43,31 @@ var weight = 1;
 
 func _ready():
 	self.add_to_group("pets")
-	var idle  = AudioStreamPlayer.new()
-	name
+	
+	idle_player = AudioStreamPlayer.new()
+	idle_player.name = "idle_player"
+	idle_player.stream = idle_noise
+	add_child(idle_player)
+	
+	drop_player = AudioStreamPlayer.new()
+	drop_player.name = "drop_player"
+	drop_player.stream = drop_noise
+	add_child(drop_player)
+	
+	grab_player = AudioStreamPlayer.new()
+	grab_player.name = "grab_player"
+	grab_player.stream = grab_noise
+	add_child(grab_player)
+	
+	panic_player = AudioStreamPlayer.new()
+	panic_player.name = "panic_player"
+	panic_player.stream = panic_noise
+	add_child(panic_player)
 
 #step
 func _physics_process(delta):
 	if _disabled:
+		# panic_player.play()
 		return
 	#gravity
 	if grav_on and not is_on_floor():
@@ -63,15 +81,18 @@ func _physics_process(delta):
 #methods
 #region
 func pick_up():
+	(func(): (func(): grab_player.play()).call_deferred()).call_deferred()
 	_disabled = true
 	(func(): collision_polygon_2d.disabled = true).call_deferred()
 	velocity = Vector2.ZERO
 
 func drop():
+	(func(): (func(): drop_player.play()).call_deferred()).call_deferred()
 	_disabled = false
 	(func(): collision_polygon_2d.disabled = false).call_deferred()
 
 func place():
+	(func(): (func(): idle_player.play()).call_deferred()).call_deferred()
 	_disabled = true
 	# NOTE: This algorithm doesn't work for all shapes lmao
 	# Set collision layer to new fridge only pets layer

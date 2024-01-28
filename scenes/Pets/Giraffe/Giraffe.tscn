@@ -1,7 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://c5cpuiydkmmpw"]
+[gd_scene load_steps=7 format=3 uid="uid://c5cpuiydkmmpw"]
 
 [ext_resource type="Script" path="res://scenes/Pets/Giraffe/Giraffe.gd" id="1_6bub4"]
 [ext_resource type="Texture2D" uid="uid://dtyqohpagdq8k" path="res://scenes/Pets/Giraffe/gerraff_J_01.png" id="2_dye4a"]
+[ext_resource type="AudioStream" uid="uid://646w2fsqjxgb" path="res://assets/petsounds/handgiraffe.wav" id="2_nf0mc"]
+[ext_resource type="AudioStream" uid="uid://c7f42lgq35bg4" path="res://assets/petsounds/dropgiraffe.wav" id="3_vqaf1"]
+[ext_resource type="AudioStream" uid="uid://cjb3k270psykp" path="res://assets/petsounds/grabgiraffe.wav" id="4_b1lbb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oi6hj"]
 atlas = ExtResource("2_dye4a")
@@ -11,6 +14,10 @@ region = Rect2(0, 0, 36, 45)
 collision_layer = 4
 collision_mask = 5
 script = ExtResource("1_6bub4")
+idle_noise = ExtResource("2_nf0mc")
+drop_noise = ExtResource("3_vqaf1")
+grab_noise = ExtResource("4_b1lbb")
+panic_noise = ExtResource("2_nf0mc")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 z_index = 1

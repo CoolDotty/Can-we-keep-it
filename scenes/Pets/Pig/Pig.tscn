@@ -1,7 +1,22 @@
-[gd_scene load_steps=4 format=3 uid="uid://bp3xrt321bew0"]
+[gd_scene load_steps=11 format=3 uid="uid://bp3xrt321bew0"]
 
 [ext_resource type="Script" path="res://scenes/Pets/Pig/Pig.gd" id="1_5cmi1"]
+[ext_resource type="AudioStream" uid="uid://rhq38qf487me" path="res://assets/petsounds/pig1.wav" id="2_2x8hi"]
 [ext_resource type="Texture2D" uid="uid://rpscanvat0x2" path="res://scenes/Pets/Pig/pig_01.png" id="2_qh17y"]
+[ext_resource type="AudioStream" uid="uid://bjuggvjun5pk2" path="res://assets/petsounds/pig2.wav" id="3_ljw0n"]
+[ext_resource type="AudioStream" uid="uid://bpe8ja0n6xsuw" path="res://assets/petsounds/pig3.wav" id="4_1g2te"]
+[ext_resource type="AudioStream" uid="uid://x3t4f2obbhxd" path="res://assets/petsounds/droppig.wav" id="5_r25p7"]
+[ext_resource type="AudioStream" uid="uid://c6a8qphbr1v5f" path="res://assets/petsounds/grabpig.wav" id="6_wtqmd"]
+[ext_resource type="AudioStream" uid="uid://srl73i47xdrk" path="res://assets/petsounds/handpig.wav" id="7_p7b25"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_rsvb6"]
+streams_count = 3
+stream_0/stream = ExtResource("2_2x8hi")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("3_ljw0n")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("4_1g2te")
+stream_2/weight = 1.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_y7ess"]
 atlas = ExtResource("2_qh17y")
@@ -11,6 +26,10 @@ region = Rect2(0, 315, 36, 36)
 collision_layer = 4
 collision_mask = 5
 script = ExtResource("1_5cmi1")
+idle_noise = SubResource("AudioStreamRandomizer_rsvb6")
+drop_noise = ExtResource("5_r25p7")
+grab_noise = ExtResource("6_wtqmd")
+panic_noise = ExtResource("7_p7b25")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(-9, -9, 9, -9, 9, 9, -9, 9)

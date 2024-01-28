@@ -139,6 +139,7 @@ flip_h = true
 position = Vector2(469, -167)
 
 [node name="Mom" type="Sprite2D" parent="Furniture"]
+z_index = 10
 position = Vector2(182, -44)
 texture = SubResource("AtlasTexture_cejev")
 script = SubResource("GDScript_da2cp")

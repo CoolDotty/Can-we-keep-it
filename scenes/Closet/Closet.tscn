@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://g5ftpcw1858y"]
+
+[ext_resource type="Script" path="res://scenes/Closet/Closet.gd" id="1_qlds5"]
+[ext_resource type="Texture2D" uid="uid://ctldrsi8ddf4j" path="res://assets/gridpoint.png" id="1_s2kdy"]
+[ext_resource type="Texture2D" uid="uid://cxccupngq2q7k" path="res://icon.svg" id="3_2s6nd"]
+
+[node name="Closet" type="Polygon2D"]
+texture_repeat = 2
+texture = ExtResource("1_s2kdy")
+script = ExtResource("1_qlds5")
+
+[node name="InsideChecker" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="InsideChecker"]
+
+[node name="EdgeChecker" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="EdgeChecker"]
+build_mode = 1
+
+[node name="SpriteOpen" type="Sprite2D" parent="."]
+texture = ExtResource("3_2s6nd")
+
+[node name="SpriteClosed" type="Sprite2D" parent="."]
+texture = ExtResource("3_2s6nd")
+
+[connection signal="body_entered" from="InsideChecker" to="." method="_on_inside_checker_body_entered"]

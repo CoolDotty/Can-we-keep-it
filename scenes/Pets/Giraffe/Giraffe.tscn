@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://c5cpuiydkmmpw"]
+
+[ext_resource type="Script" path="res://scenes/Pets/Giraffe/Giraffe.gd" id="1_6bub4"]
+[ext_resource type="Texture2D" uid="uid://dtyqohpagdq8k" path="res://scenes/Pets/Giraffe/gerraff_J_01.png" id="2_dye4a"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oi6hj"]
+atlas = ExtResource("2_dye4a")
+region = Rect2(0, 0, 36, 45)
+
+[node name="Giraffe" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 5
+script = ExtResource("1_6bub4")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-9, 4, 0, 4, 0, -14, 9, -14, 9, 13, -9, 13)
+one_way_collision = true
+
+[node name="SpriteLimbs" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_oi6hj")
+
+[node name="SpriteNoLimbs" type="Sprite2D" parent="."]
+visible = false

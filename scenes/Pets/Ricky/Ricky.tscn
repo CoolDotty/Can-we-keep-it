@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://ctsudgblrxpdu"]
+
+[ext_resource type="Script" path="res://scenes/Pets/Ricky/Rickey.gd" id="1_fclwf"]
+[ext_resource type="Texture2D" uid="uid://djvk4v1hhcp52" path="res://scenes/Pets/Ricky/ricky_01.png" id="1_y6u1x"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4mxot"]
+atlas = ExtResource("1_y6u1x")
+region = Rect2(0, 0, 36, 45)
+
+[node name="Ricky" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 5
+script = ExtResource("1_fclwf")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-9, -14, 0, -14, 0, -5, 9, -5, 9, 13, 0, 13, 0, 4, -9, 4)
+one_way_collision = true
+
+[node name="SpriteLimbs" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_4mxot")
+
+[node name="SpriteNoLimbs" type="Sprite2D" parent="."]
+visible = false

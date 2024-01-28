@@ -131,7 +131,17 @@ func _process(delta):
 #PHYSICS STEP
 func _physics_process(delta):
 	#unstucl
-	var walls = stuck_check.get_overlapping_bodies().filter(func(b): return not b.get_child(0).one_way_collision)
+	print(stuck_check.get_overlapping_bodies())
+	#var walls = stuck_check.get_overlapping_bodies().filter(func(b): return not b.get_child(0).one_way_collision)
+	var walls = stuck_check.get_overlapping_bodies().filter(func(b): 
+		var collision_shape = b.get_child(0)
+		if (is_instance_valid(collision_shape)):
+			return not b.get_child(0).one_way_collision
+		else :
+			# inside tilemap. We are stuck :(
+			return true
+			)
+	
 	if walls.size() > 0:
 		position = was_at
 	else:
@@ -706,10 +716,10 @@ func drop_hand(depot=null):
 	if Input.is_action_pressed("move_up"): 
 		print("throw up!!")
 		throw_mod_y = -300
-		throw_mod_x = 50;
+		throw_mod_x = 0
 	
-	pet.velocity.x = velocity.x +throw_mod_x*direction
-	pet.velocity.y = velocity.y +throw_mod_y
+	pet.velocity.x = (velocity.x +throw_mod_x*direction)*(1/pet.weight)
+	pet.velocity.y = (velocity.y +throw_mod_y)*(1/pet.weight)
 	pet.rotation = 0
 	pet.drop()
 	(func(): get_parent().add_child(pet)).call_deferred()

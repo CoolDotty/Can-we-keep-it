@@ -14,7 +14,6 @@ script = ExtResource("1_5cmi1")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(-9, -9, 9, -9, 9, 9, -9, 9)
-one_way_collision = true
 
 [node name="SpriteLimbs" type="Sprite2D" parent="."]
 texture = SubResource("AtlasTexture_y7ess")

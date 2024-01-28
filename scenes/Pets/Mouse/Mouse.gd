@@ -22,7 +22,8 @@ func _physics_process(delta):
 	#stop if disabled
 	if _disabled:
 		return
-	
+	super(delta)
+	weight = 0.8
 	
 	if velocity.x > 0:
 		sprite_limbs.scale.x = -1

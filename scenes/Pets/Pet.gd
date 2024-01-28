@@ -16,12 +16,15 @@ var _disabled = false
 #INITIATE VARS
 #region
 #gravity
-var grav_on = false
+var grav_on = true
 var grav_accel  	= 900
 var max_fall_speed 	= 300
+#horizontal deceleration
+var friction = true
+var g_decel 		=  800 #ground friction
+#weight class - affects through distance
+var weight = 1;
 
-
-var g_decel 		=  100 #ground friction
 #endregion
 
 func _ready():
@@ -31,8 +34,12 @@ func _ready():
 func _physics_process(delta):
 	if _disabled:
 		return
+	#gravity
 	if grav_on and not is_on_floor():
 		velocity.y = move_toward(velocity.y, max_fall_speed, grav_accel*delta)
+	#friction
+	if friction and is_on_floor():
+		velocity.x = move_toward(velocity.x, 0, g_decel*delta)
 		
 	move_and_slide()
 

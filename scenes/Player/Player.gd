@@ -128,8 +128,10 @@ func _process(delta):
 func _physics_process(delta):
 	#unstucl
 	if stuck_check.get_overlapping_bodies():
-		position = was_at	
-	was_at = position
+		print(stuck_check.get_overlapping_bodies())
+		position = was_at
+	else:
+		was_at = position
 	
 	# every frame place mode - is this the phycokenetic thing?
 	#region

@@ -1,7 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://b8ufo47dm870u"]
+[gd_scene load_steps=4 format=3 uid="uid://b3m8mmpyyb74o"]
 
 [ext_resource type="PackedScene" uid="uid://cp1x400lifuke" path="res://scenes/Tilemap/Tiles.tscn" id="1_23eyp"]
-[ext_resource type="PackedScene" uid="uid://rwjo72v4gsim" path="res://scenes/Player/Player.tscn" id="2_ct2fm"]
 [ext_resource type="PackedScene" uid="uid://c5cpuiydkmmpw" path="res://scenes/Pets/Giraffe/Giraffe.tscn" id="3_om82c"]
 [ext_resource type="PackedScene" uid="uid://bp3xrt321bew0" path="res://scenes/Pets/Pig/Pig.tscn" id="4_043tp"]
 
@@ -13,9 +12,6 @@ layer_0/tile_data = PackedInt32Array(1245184, 131072, 0, 1245185, 131072, 0, 124
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(160, 90)
 zoom = Vector2(4, 4)
-
-[node name="Player" parent="." instance=ExtResource("2_ct2fm")]
-position = Vector2(291, 161)
 
 [node name="Giraffe" parent="." instance=ExtResource("3_om82c")]
 position = Vector2(26, 149)

@@ -1,0 +1,173 @@
+[gd_scene load_steps=11 format=3 uid="uid://cpek5ii678xki"]
+
+[ext_resource type="Texture2D" uid="uid://deid3nbje6x2t" path="res://assets/HouseObjects.png" id="1_hj5ii"]
+
+[sub_resource type="GDScript" id="GDScript_g3a0x"]
+script/source = "extends Node2D
+
+
+@onready var sprite_open = $SpriteOpen
+@onready var sprite_closed = $SpriteClosed
+
+@onready var audio_open = $AudioOpen
+@onready var audio_closed = $AudioClosed
+@onready var contents = $Contents
+@onready var inside_checker = $InsideChecker/CollisionShape2D
+
+var is_open = false
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+func _physics_process(delta):
+	sprite_open.visible = is_open
+	sprite_closed.visible = not is_open
+
+
+func _on_open_checker_body_entered(body):
+	if body.name == \"Player\":
+		is_open = true
+		(func(): inside_checker.disabled = false).call_deferred()
+		contents.visible = true
+		audio_open.play()
+
+
+func _on_open_checker_body_exited(body):
+	if body.name == \"Player\":
+		is_open = false
+		contents.visible = false
+		(func(): inside_checker.disabled = true).call_deferred()
+		audio_closed.play()
+"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yq7r0"]
+atlas = ExtResource("1_hj5ii")
+region = Rect2(207, 306, 72, 63)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ql2ww"]
+size = Vector2(36, 9)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fdobq"]
+size = Vector2(9, 18)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j8o3l"]
+size = Vector2(18, 18)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7lx4s"]
+size = Vector2(9, 9)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_kynpu"]
+a = Vector2(36, -38)
+b = Vector2(-36, -38)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_lyy6o"]
+a = Vector2(-36, -21)
+b = Vector2(36, -21)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_g5khk"]
+a = Vector2(-36, 6)
+b = Vector2(36, 6)
+
+[node name="BookShelf" type="Node2D"]
+script = SubResource("GDScript_g3a0x")
+
+[node name="SpriteClosed" type="Sprite2D" parent="."]
+position = Vector2(0, -8)
+texture = SubResource("AtlasTexture_yq7r0")
+
+[node name="SpriteOpen" type="Sprite2D" parent="."]
+position = Vector2(0, -8)
+texture = SubResource("AtlasTexture_yq7r0")
+
+[node name="AudioOpen" type="AudioStreamPlayer" parent="."]
+
+[node name="AudioClosed" type="AudioStreamPlayer" parent="."]
+
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="InsideChecker" type="Area2D" parent="Node2D"]
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/InsideChecker"]
+position = Vector2(-9, -29)
+shape = SubResource("RectangleShape2D_ql2ww")
+debug_color = Color(0, 0.6, 0.701961, 0)
+
+[node name="Node2D2" type="Node2D" parent="."]
+
+[node name="InsideChecker" type="Area2D" parent="Node2D2"]
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D2/InsideChecker"]
+position = Vector2(16, -6)
+shape = SubResource("RectangleShape2D_fdobq")
+debug_color = Color(0, 0.6, 0.701961, 0)
+
+[node name="Node2D3" type="Node2D" parent="."]
+
+[node name="InsideChecker" type="Area2D" parent="Node2D3"]
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D3/InsideChecker"]
+position = Vector2(-16, -9)
+shape = SubResource("RectangleShape2D_j8o3l")
+debug_color = Color(0, 0.6, 0.701961, 0)
+
+[node name="Node2D4" type="Node2D" parent="."]
+
+[node name="InsideChecker" type="Area2D" parent="Node2D4"]
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D4/InsideChecker"]
+position = Vector2(-16, 14)
+shape = SubResource("RectangleShape2D_7lx4s")
+debug_color = Color(0, 0.6, 0.701961, 0)
+
+[node name="Node2D5" type="Node2D" parent="."]
+
+[node name="InsideChecker" type="Area2D" parent="Node2D5"]
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D5/InsideChecker"]
+position = Vector2(20, -29)
+shape = SubResource("RectangleShape2D_7lx4s")
+debug_color = Color(0, 0.6, 0.701961, 0)
+
+[node name="CounterTop" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CounterTop"]
+shape = SubResource("SegmentShape2D_kynpu")
+one_way_collision = true
+
+[node name="CounterTop2" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CounterTop2"]
+position = Vector2(0, 1)
+shape = SubResource("SegmentShape2D_lyy6o")
+one_way_collision = true
+
+[node name="CounterTop3" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CounterTop3"]
+position = Vector2(0, 1)
+shape = SubResource("SegmentShape2D_g5khk")
+one_way_collision = true
+
+[node name="Contents" type="Node2D" parent="."]
+top_level = true
+
+[node name="OpenChecker" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OpenChecker"]
+position = Vector2(0, 1)
+debug_color = Color(0, 1, 0, 0)

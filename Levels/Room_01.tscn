@@ -1,8 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://cibfcflh33wjk"]
+[gd_scene load_steps=7 format=3 uid="uid://dmnadann7vn4m"]
 
 [ext_resource type="Texture2D" uid="uid://bbxoamgjbf2ok" path="res://assets/GroundTile.png" id="1_ik246"]
 [ext_resource type="Texture2D" uid="uid://k3vck380hwg1" path="res://scenes/Tilemap/tiles.png" id="2_hirff"]
-[ext_resource type="PackedScene" uid="uid://rwjo72v4gsim" path="res://scenes/Player/Player.tscn" id="3_h7fiv"]
 [ext_resource type="PackedScene" uid="uid://bgc2jqnt8wb7u" path="res://scenes/Pets/Cat/Cat.tscn" id="4_t8d85"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ailp3"]
@@ -298,9 +297,6 @@ layer_0/tile_data = PackedInt32Array(0, 655360, 8, 65536, 131073, 1, 131072, 131
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(160, 90)
 zoom = Vector2(4, 4)
-
-[node name="Player" parent="." instance=ExtResource("3_h7fiv")]
-position = Vector2(296, 160)
 
 [node name="Cat" parent="." instance=ExtResource("4_t8d85")]
 position = Vector2(293, 45)

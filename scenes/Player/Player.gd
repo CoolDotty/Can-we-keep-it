@@ -345,10 +345,10 @@ func _physics_process(delta):
 		##print(MoveState.keys()[player_state])
 
 func placemode2():
+	placement_tester_poly_visible.color = Color.TRANSPARENT
 	if not is_instance_valid(held):
 		placement_tester_poly.polygon = []
 		#held.rotation_degrees = 0
-		placement_tester_poly_visible.color = Color.TRANSPARENT
 		return null
 	
 	if Input.is_action_just_pressed("place_mode") and is_instance_valid(held):
@@ -356,12 +356,16 @@ func placemode2():
 	
 	placement_tester_poly.polygon = held.collision_polygon_2d.polygon
 	placement_tester_poly_visible.polygon = held.collision_polygon_2d.polygon
-	placement_tester_poly_visible.color = Color(1, 0, 0, 0.5)
 	placement_tester.rotation_degrees = held.rotation_degrees
 	
 	var depots = placement_tester.get_overlapping_areas()
 	var pets = placement_tester.get_overlapping_bodies()
 	var edgechecker = null
+	
+	if depots.size() == 0:
+		return null
+	placement_tester_poly_visible.color = Color(1, 0, 0, 0.5)
+	
 	for d in depots:
 		if d.name == "EdgeChecker":
 			edgechecker = d
@@ -371,7 +375,6 @@ func placemode2():
 		if d.name == "InsideChecker":
 			insidechecker = d
 			break
-	
 	
 	if is_instance_valid(edgechecker) and is_instance_valid(insidechecker) and edgechecker.owner != insidechecker.owner:
 		# Sanity check we're looking at two parts of the same thing

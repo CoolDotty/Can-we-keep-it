@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://b17x7pq5g0oij"
+path="res://.godot/imported/GAMEJAM VANCOUVER 2024_ANIMALJAM_MUSIC.wav-9ba766632333c24a76947a351e97d538.sample"
+
+[deps]
+
+source_file="res://assets/GAMEJAM VANCOUVER 2024_ANIMALJAM_MUSIC.wav"
+dest_files=["res://.godot/imported/GAMEJAM VANCOUVER 2024_ANIMALJAM_MUSIC.wav-9ba766632333c24a76947a351e97d538.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

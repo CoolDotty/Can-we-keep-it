@@ -1,56 +1,61 @@
-[gd_scene load_steps=5 format=3 uid="uid://duf2keijulwq1"]
+[gd_scene load_steps=9 format=3 uid="uid://duf2keijulwq1"]
 
 [ext_resource type="PackedScene" uid="uid://xn0vswoniels" path="res://Levels/House.tscn" id="1_13v1c"]
 [ext_resource type="PackedScene" uid="uid://bhppkwlf8uo2u" path="res://Levels/Room_00.tscn" id="2_eb0f4"]
+[ext_resource type="PackedScene" uid="uid://dmnadann7vn4m" path="res://Levels/Room_01.tscn" id="2_rlpaw"]
+[ext_resource type="PackedScene" uid="uid://cmptpmiuj5tdm" path="res://Levels/Room_03.tscn" id="3_os88l"]
+[ext_resource type="PackedScene" uid="uid://b3m8mmpyyb74o" path="res://Levels/Room_05.tscn" id="4_6kiwx"]
+[ext_resource type="AudioStream" uid="uid://c2vypspd4al22" path="res://assets/GAMEJAM VANCOUVER 2024_ANIMALJAM_MUSIC.ogg" id="6_0aem8"]
 
 [sub_resource type="GDScript" id="GDScript_opjee"]
 script/source = "extends Node2D
 
 @onready var house_cam = $House/Camera2D
 
-var level: Node2D
-var current_level = 0
+@export var level: Node2D
+@export var current_level = 0
 
-var levels = [
-	preload(\"res://Levels/Room_00.tscn\")
-]
+@export var levels: Array[PackedScene] = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	_change_level(0)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
 
-
-func _physics_process(delta):
-	var all_pets = get_tree().get_nodes_in_group(\"pets\")
-	var some_left = false
-	for pet in all_pets:
-		if pet.position.x < 0:
-			some_left = true
-	
-	if not some_left:
-		if current_level + 1 < levels.size():
-			current_level += 1
-
 func _change_level(num: int):
+	if num >= levels.size():
+		return
 	if is_instance_valid(level):
 		level.queue_free()
-	if current_level + 1 < levels.size():
-			current_level += 1
 	current_level = num
 	level = levels[num].instantiate()
 	level.position = Vector2(-315, -171)
+	add_child(level)
 
 func _on_home_checker_body_entered(body):
-	house_cam.enabled = true
+	if body.name == \"Player\":
+		house_cam.enabled = true
+		level.get_node(\"Camera2D\").enabled = false
+	
+	var all_pets = get_tree().get_nodes_in_group(\"pets\")
+	var some_left = false
+	for pet in all_pets:
+		if pet.global_position.x < 0:
+			some_left = true
+	
+	if not some_left:
+		_change_level(current_level + 1)
 
 
 func _on_home_checker_body_exited(body):
-	house_cam.enabled = false
+	if body.name == \"Player\":
+		house_cam.enabled = false
+		if is_instance_valid(level):
+			level.get_node(\"Camera2D\").enabled = true
 "
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ueudk"]
@@ -58,20 +63,25 @@ size = Vector2(643, 255)
 
 [node name="Main" type="Node2D"]
 script = SubResource("GDScript_opjee")
+levels = Array[PackedScene]([ExtResource("2_eb0f4"), ExtResource("2_rlpaw"), ExtResource("3_os88l"), ExtResource("4_6kiwx")])
 
 [node name="House" parent="." instance=ExtResource("1_13v1c")]
 position = Vector2(9, 0)
 
 [node name="HomeChecker" type="Area2D" parent="House"]
 position = Vector2(1, 0)
+collision_layer = 0
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="House/HomeChecker"]
 position = Vector2(316.5, -122.5)
 shape = SubResource("RectangleShape2D_ueudk")
-debug_color = Color(0, 0.6, 0.701961, 0)
+debug_color = Color(0, 0.619608, 0.568627, 0)
 
-[node name="Room00" parent="." instance=ExtResource("2_eb0f4")]
-position = Vector2(-315, -171)
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_0aem8")
+volume_db = -10.0
+autoplay = true
 
 [connection signal="body_entered" from="House/HomeChecker" to="." method="_on_home_checker_body_entered"]
 [connection signal="body_exited" from="House/HomeChecker" to="." method="_on_home_checker_body_exited"]

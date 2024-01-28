@@ -31,6 +31,7 @@ texture = SubResource("AtlasTexture_0t2lk")
 
 [node name="SpriteOpen" type="Sprite2D" parent="."]
 visible = false
+z_index = -1
 position = Vector2(-4, 0)
 texture = SubResource("AtlasTexture_vpxkp")
 

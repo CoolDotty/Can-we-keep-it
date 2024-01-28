@@ -5,11 +5,26 @@ class_name Pet
 @export var species: String
 @export var nickname: String
 
+@export var idle_noise: AudioStream
+@export var drop_noise: AudioStream
+@export var grab_noise: AudioStream
+@export var panic_noise: AudioStream
+
 
 @onready var sprite_limbs = $SpriteLimbs
 @onready var sprite_no_limbs = $SpriteNoLimbs
 @onready var collision_polygon_2d = $CollisionPolygon2D
 
+func _audio_register(name):
+	var a = AudioStreamPlayer.new()
+	a.name = name
+	add_child(a)
+	return a
+
+@onready var idle_player = _audio_register("IdlePlayer")
+@onready var idle_player = _audio_register("DropPlayer")
+@onready var idle_player = _audio_register("GrabPlayer")
+@onready var idle_player = _audio_register("PanicPlayer")
 
 var _disabled = false
 
@@ -29,6 +44,8 @@ var weight = 1;
 
 func _ready():
 	self.add_to_group("pets")
+	var idle  = AudioStreamPlayer.new()
+	name
 
 #step
 func _physics_process(delta):

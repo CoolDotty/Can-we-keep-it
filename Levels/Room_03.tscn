@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://10bmrx52k2h7"]
+[gd_scene load_steps=5 format=3 uid="uid://cmptpmiuj5tdm"]
 
 [ext_resource type="PackedScene" uid="uid://cp1x400lifuke" path="res://scenes/Tilemap/Tiles.tscn" id="1_gxlao"]
-[ext_resource type="PackedScene" uid="uid://rwjo72v4gsim" path="res://scenes/Player/Player.tscn" id="2_qoya0"]
 [ext_resource type="PackedScene" uid="uid://dx0ur4uid32i7" path="res://scenes/Pets/Dog/Dog.tscn" id="3_oqrjx"]
 [ext_resource type="PackedScene" uid="uid://bgc2jqnt8wb7u" path="res://scenes/Pets/Cat/Cat.tscn" id="4_kdl6k"]
 [ext_resource type="PackedScene" uid="uid://bp3xrt321bew0" path="res://scenes/Pets/Pig/Pig.tscn" id="5_i442l"]
@@ -14,9 +13,6 @@ layer_0/tile_data = PackedInt32Array(0, 655361, 6, 65536, 655361, 6, 131072, 655
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(160, 90)
 zoom = Vector2(4, 4)
-
-[node name="Player" parent="." instance=ExtResource("2_qoya0")]
-position = Vector2(292, 161)
 
 [node name="Dog" parent="." instance=ExtResource("3_oqrjx")]
 position = Vector2(236, 38)

@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://c2vypspd4al22"
+path="res://.godot/imported/GAMEJAM VANCOUVER 2024_ANIMALJAM_MUSIC.ogg-c717154786e27f15082729c3b3f1f64a.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/GAMEJAM VANCOUVER 2024_ANIMALJAM_MUSIC.ogg"
+dest_files=["res://.godot/imported/GAMEJAM VANCOUVER 2024_ANIMALJAM_MUSIC.ogg-c717154786e27f15082729c3b3f1f64a.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

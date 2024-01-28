@@ -1,68 +1,77 @@
-[gd_scene load_steps=7 format=3 uid="uid://duf2keijulwq1"]
+[gd_scene load_steps=5 format=3 uid="uid://duf2keijulwq1"]
 
-[ext_resource type="PackedScene" uid="uid://rwjo72v4gsim" path="res://scenes/Player/Player.tscn" id="1_wjdv8"]
-[ext_resource type="PackedScene" uid="uid://g5ftpcw1858y" path="res://scenes/Closet/Closet.tscn" id="4_6a3wu"]
-[ext_resource type="PackedScene" uid="uid://bv3v5iu8msevs" path="res://scenes/ChaseCamera/ChaseCamera.tscn" id="4_nqlin"]
-[ext_resource type="PackedScene" uid="uid://ckybk2trj1vee" path="res://scenes/Pets/Mouse/Mouse.tscn" id="4_tiwio"]
+[ext_resource type="PackedScene" uid="uid://xn0vswoniels" path="res://Levels/House.tscn" id="1_13v1c"]
+[ext_resource type="PackedScene" uid="uid://bhppkwlf8uo2u" path="res://Levels/Room_00.tscn" id="2_eb0f4"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_mgcyx"]
-size = Vector2(2148.5, 20)
+[sub_resource type="GDScript" id="GDScript_opjee"]
+script/source = "extends Node2D
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_f7rgl"]
-size = Vector2(275.5, 20)
+@onready var house_cam = $House/Camera2D
+
+var level: Node2D
+var current_level = 0
+
+var levels = [
+	preload(\"res://Levels/Room_00.tscn\")
+]
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+
+
+func _physics_process(delta):
+	var all_pets = get_tree().get_nodes_in_group(\"pets\")
+	var some_left = false
+	for pet in all_pets:
+		if pet.position.x < 0:
+			some_left = true
+	
+	if not some_left:
+		if current_level + 1 < levels.size():
+			current_level += 1
+
+func _change_level(num: int):
+	if is_instance_valid(level):
+		level.queue_free()
+	if current_level + 1 < levels.size():
+			current_level += 1
+	current_level = num
+	level = levels[num].instantiate()
+	level.position = Vector2(-315, -171)
+
+func _on_home_checker_body_entered(body):
+	house_cam.enabled = true
+
+
+func _on_home_checker_body_exited(body):
+	house_cam.enabled = false
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ueudk"]
+size = Vector2(643, 255)
 
 [node name="Main" type="Node2D"]
+script = SubResource("GDScript_opjee")
 
-[node name="Player" parent="." instance=ExtResource("1_wjdv8")]
-position = Vector2(304, 281)
+[node name="House" parent="." instance=ExtResource("1_13v1c")]
+position = Vector2(9, 0)
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
-position = Vector2(319, 350)
-metadata/_edit_group_ = true
+[node name="HomeChecker" type="Area2D" parent="House"]
+position = Vector2(1, 0)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-shape = SubResource("RectangleShape2D_mgcyx")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="House/HomeChecker"]
+position = Vector2(316.5, -122.5)
+shape = SubResource("RectangleShape2D_ueudk")
+debug_color = Color(0, 0.6, 0.701961, 0)
 
-[node name="platform 2" type="StaticBody2D" parent="."]
-position = Vector2(671, 285)
-metadata/_edit_group_ = true
+[node name="Room00" parent="." instance=ExtResource("2_eb0f4")]
+position = Vector2(-315, -171)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="platform 2"]
-position = Vector2(753.75, 0)
-shape = SubResource("RectangleShape2D_mgcyx")
-
-[node name="platform 3" type="StaticBody2D" parent="."]
-position = Vector2(-753, 402)
-rotation = 1.5708
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="platform 3"]
-position = Vector2(-182.75, 0)
-shape = SubResource("RectangleShape2D_f7rgl")
-
-[node name="ChaseCamera" parent="." node_paths=PackedStringArray("focus") instance=ExtResource("4_nqlin")]
-focus = NodePath("../Player")
-
-[node name="Mouse" parent="." instance=ExtResource("4_tiwio")]
-position = Vector2(282, 306)
-
-[node name="Mouse2" parent="." instance=ExtResource("4_tiwio")]
-position = Vector2(-547, 300)
-
-[node name="Mouse3" parent="." instance=ExtResource("4_tiwio")]
-position = Vector2(-625, 233)
-
-[node name="Mouse4" parent="." instance=ExtResource("4_tiwio")]
-position = Vector2(-492, 237)
-
-[node name="Mouse5" parent="." instance=ExtResource("4_tiwio")]
-position = Vector2(-583, 234)
-
-[node name="Mouse6" parent="." instance=ExtResource("4_tiwio")]
-position = Vector2(-506, 196)
-
-[node name="Closet" parent="." instance=ExtResource("4_6a3wu")]
-position = Vector2(252, 315)
-polygon = PackedVector2Array(-9, -18, -9, -36, 10, -36, 10, -27, 0, -27, 0, -18, 9, -18, 9, 18, -18, 18, -18, -18)
-sprite_open = null
-sprite_closed = null
+[connection signal="body_entered" from="House/HomeChecker" to="." method="_on_home_checker_body_entered"]
+[connection signal="body_exited" from="House/HomeChecker" to="." method="_on_home_checker_body_exited"]

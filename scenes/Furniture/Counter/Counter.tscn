@@ -1,7 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://ti712gsd5j2a"]
+[gd_scene load_steps=10 format=3 uid="uid://ti712gsd5j2a"]
 
 [ext_resource type="Script" path="res://scenes/Furniture/Counter/Counter.gd" id="1_3nul7"]
 [ext_resource type="Texture2D" uid="uid://deid3nbje6x2t" path="res://assets/HouseObjects.png" id="2_1r8y7"]
+[ext_resource type="AudioStream" uid="uid://bkin1y0ivw20s" path="res://assets/fridge_open.ogg" id="3_65qy4"]
+[ext_resource type="AudioStream" uid="uid://84ssnaovwwka" path="res://assets/fridge_close.ogg" id="4_y2nfb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gjlgq"]
 atlas = ExtResource("2_1r8y7")
@@ -33,8 +35,10 @@ position = Vector2(0, -1)
 texture = SubResource("AtlasTexture_w8qfv")
 
 [node name="AudioOpen" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_65qy4")
 
 [node name="AudioClosed" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_y2nfb")
 
 [node name="InsideChecker" type="Area2D" parent="."]
 collision_layer = 8

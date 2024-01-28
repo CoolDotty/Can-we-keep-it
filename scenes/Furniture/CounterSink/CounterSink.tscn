@@ -1,0 +1,83 @@
+[gd_scene load_steps=10 format=3 uid="uid://cwa76u0ktxs7c"]
+
+[ext_resource type="Script" path="res://scenes/Furniture/CounterSink/CounterSink.gd" id="1_p32xe"]
+[ext_resource type="Texture2D" uid="uid://deid3nbje6x2t" path="res://assets/HouseObjects.png" id="2_eyji1"]
+[ext_resource type="AudioStream" uid="uid://bkin1y0ivw20s" path="res://assets/fridge_open.ogg" id="3_b0gnp"]
+[ext_resource type="AudioStream" uid="uid://84ssnaovwwka" path="res://assets/fridge_close.ogg" id="4_0thii"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ityr5"]
+atlas = ExtResource("2_eyji1")
+region = Rect2(305, 5, 55, 58)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lf5y5"]
+atlas = ExtResource("2_eyji1")
+region = Rect2(369, 4, 84, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wwkwo"]
+size = Vector2(45, 36)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_iyfon"]
+a = Vector2(-27, -23)
+b = Vector2(27, -23)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o7uyf"]
+size = Vector2(48, 38)
+
+[node name="Counter" type="Node2D"]
+script = ExtResource("1_p32xe")
+
+[node name="SpriteClosed" type="Sprite2D" parent="."]
+position = Vector2(0, -8)
+texture = SubResource("AtlasTexture_ityr5")
+
+[node name="SpriteOpen" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(0, -8)
+texture = SubResource("AtlasTexture_lf5y5")
+
+[node name="AudioOpen" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_b0gnp")
+
+[node name="AudioClosed" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_0thii")
+
+[node name="InsideChecker" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InsideChecker"]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_wwkwo")
+debug_color = Color(0, 0.6, 0.701961, 0)
+
+[node name="EdgeChecker" type="Area2D" parent="."]
+visible = false
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="EdgeChecker"]
+position = Vector2(-1, 1)
+build_mode = 1
+polygon = PackedVector2Array(-24, -20, 26, -20, 26, 20, -24, 20)
+
+[node name="CounterTop" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CounterTop"]
+shape = SubResource("SegmentShape2D_iyfon")
+one_way_collision = true
+debug_color = Color(0, 0.6, 0.701961, 0)
+
+[node name="Contents" type="Node2D" parent="."]
+top_level = true
+
+[node name="OpenChecker" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OpenChecker"]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_o7uyf")
+debug_color = Color(0, 1, 0, 0)
+
+[connection signal="body_entered" from="OpenChecker" to="." method="_on_open_checker_body_entered"]
+[connection signal="body_exited" from="OpenChecker" to="." method="_on_open_checker_body_exited"]

@@ -1,0 +1,80 @@
+[gd_scene load_steps=11 format=3 uid="uid://b2ns68gdylu0a"]
+
+[ext_resource type="Script" path="res://scenes/Furniture/Door/Door.gd" id="1_yknpp"]
+[ext_resource type="Texture2D" uid="uid://deid3nbje6x2t" path="res://assets/HouseObjects.png" id="2_ehlue"]
+[ext_resource type="AudioStream" uid="uid://bkin1y0ivw20s" path="res://assets/fridge_open.ogg" id="2_ohhqx"]
+[ext_resource type="AudioStream" uid="uid://84ssnaovwwka" path="res://assets/fridge_close.ogg" id="3_2ilcr"]
+[ext_resource type="Texture2D" uid="uid://bbxoamgjbf2ok" path="res://assets/GroundTile.png" id="5_0h3qk"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7sf2g"]
+atlas = ExtResource("2_ehlue")
+region = Rect2(72, 144, 63, 99)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q7to8"]
+atlas = ExtResource("2_ehlue")
+region = Rect2(144, 137, 110, 114)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g8u07"]
+size = Vector2(54, 90)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1ba3h"]
+size = Vector2(62, 101)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q2nqd"]
+atlas = ExtResource("5_0h3qk")
+region = Rect2(171, 54, 18, 18)
+
+[node name="Door" type="Node2D"]
+script = ExtResource("1_yknpp")
+
+[node name="SpriteClosed" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_7sf2g")
+
+[node name="SpriteOpen" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(23, 0)
+texture = SubResource("AtlasTexture_q7to8")
+
+[node name="AudioOpen" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_ohhqx")
+
+[node name="AudioClosed" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_2ilcr")
+
+[node name="InsideChecker" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InsideChecker"]
+position = Vector2(-1, 4)
+shape = SubResource("RectangleShape2D_g8u07")
+debug_color = Color(0, 0.6, 0.701961, 0)
+
+[node name="EdgeChecker" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="EdgeChecker"]
+position = Vector2(-1, 1)
+build_mode = 1
+polygon = PackedVector2Array(-40, -51, 34, -50, 37, 56, -41, 58)
+
+[node name="Contents" type="Node2D" parent="."]
+top_level = true
+z_index = -1
+
+[node name="OpenChecker" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OpenChecker"]
+position = Vector2(-1, 2.5)
+shape = SubResource("RectangleShape2D_1ba3h")
+debug_color = Color(0, 1, 0, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.196078, 0.196078, 0.196078, 1)
+z_index = -1
+position = Vector2(0, 1.5)
+scale = Vector2(3.11111, 5.27778)
+texture = SubResource("AtlasTexture_q2nqd")

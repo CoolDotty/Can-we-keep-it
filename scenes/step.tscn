@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8q1hqqt8q7pd"]
+
+[ext_resource type="Texture2D" uid="uid://bxpjcbnvaf28e" path="res://assets/stair.png" id="1_ilhie"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_oi66h"]
+a = Vector2(-18, -8)
+b = Vector2(18, -8)
+
+[node name="Step" type="StaticBody2D"]
+position = Vector2(312, -8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("SegmentShape2D_oi66h")
+one_way_collision = true
+
+[node name="Stair" type="Sprite2D" parent="."]
+texture = ExtResource("1_ilhie")

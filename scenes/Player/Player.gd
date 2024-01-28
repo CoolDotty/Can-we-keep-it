@@ -233,16 +233,17 @@ func _physics_process(delta):
 	#jumping
 	is_jumping = false
 	var ups  = (abs(velocity.x)/g_top_speed)*running_jump + jump_strength
-	if Input.is_action_just_pressed("jump") and is_on_floor() :
-		#stuck checl
-		if stuck_check.get_overlapping_bodies():
-			print("is stuck")
-		#running start
-		#var ups  = (abs(velocity.x)/g_top_speed)*running_jump + jump_strength
-		is_jumping = true
-		velocity.y = ups
-		player_state = MoveState.jumping
-	# check for early release - short hop
+	if Input.is_action_just_pressed("jump"): 
+		if is_on_floor() :
+			#stuck checl
+			if stuck_check.get_overlapping_bodies():
+				print("is stuck")
+			#running start
+			#var ups  = (abs(velocity.x)/g_top_speed)*running_jump + jump_strength
+			is_jumping = true
+			velocity.y = ups
+			player_state = MoveState.jumping
+	
 	if Input.is_action_just_released("jump") and velocity.y<0:
 		#calculate fall grav porportioinal to jump height/ jump strength velocity
 		var fall_grav = abs(velocity.y)/abs(ups)
@@ -329,6 +330,9 @@ func _physics_process(delta):
 		##print(MoveState.keys()[player_state])
 
 
+
+#METHODS
+#region
 func on_ground(delta, isEntering: bool) -> void:
 	if (isEntering):
 		pass
@@ -675,3 +679,5 @@ func hand_is_empty() -> bool:
 			#held = pet
 		#else:
 			#pet.dodge();
+
+#endregion

@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://cc64k6bx2i8xu"]
+[gd_scene load_steps=5 format=3 uid="uid://cc64k6bx2i8xu"]
 
 [ext_resource type="PackedScene" uid="uid://cp1x400lifuke" path="res://scenes/Tilemap/Tiles.tscn" id="1_3felr"]
 [ext_resource type="PackedScene" uid="uid://ctsudgblrxpdu" path="res://scenes/Pets/Ricky/Ricky.tscn" id="2_8bgfo"]
-[ext_resource type="PackedScene" uid="uid://rwjo72v4gsim" path="res://scenes/Player/Player.tscn" id="3_qxeih"]
 [ext_resource type="PackedScene" uid="uid://bi7r7g3nuh6cu" path="res://scenes/Pets/Fred/Fred.tscn" id="4_y2miy"]
 [ext_resource type="PackedScene" uid="uid://dx0ur4uid32i7" path="res://scenes/Pets/Dog/Dog.tscn" id="5_4jj3q"]
 
@@ -17,9 +16,6 @@ zoom = Vector2(4, 4)
 
 [node name="Ricky" parent="." instance=ExtResource("2_8bgfo")]
 position = Vector2(55, 48)
-
-[node name="Player" parent="." instance=ExtResource("3_qxeih")]
-position = Vector2(293, 161)
 
 [node name="Fred" parent="." instance=ExtResource("4_y2miy")]
 position = Vector2(76, 158)

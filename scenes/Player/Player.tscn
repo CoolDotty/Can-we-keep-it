@@ -78,6 +78,11 @@ collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_ynfev")
 
+[node name="stuck_check" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="stuck_check"]
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, 0)
 shape = SubResource("RectangleShape2D_y01nk")

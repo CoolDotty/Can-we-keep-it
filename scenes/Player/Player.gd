@@ -46,16 +46,29 @@ var player_state = MoveState.falling
 @onready var place_checker = $Player/Hand/PlaceChecker
 @onready var place_checker_collision = $Player/Hand/PlaceChecker/CollisionPolygon2D
 
+
+
 #grabby droppy
 var is_place_mode = false
 var held = null
 
 #switches
 var grounded = true
-var direction = 1
+var direction = -1
 var is_jumping = false
 var grab = false
+var carry = false
+
+var was_at = position
+
 #endregion
+@onready var stuck_check = $stuck_check
+@onready var stuck_collision_shape_2d = $stuck_check/CollisionShape2D
+@onready var player_collision_shape_2d = $CollisionShape2D
+
+func _ready():
+	#stuck check
+	stuck_collision_shape_2d.shape = player_collision_shape_2d.shape
 
 #animation
 func _process(delta):
@@ -113,6 +126,11 @@ func _process(delta):
 
 #PHYSICS STEP
 func _physics_process(delta):
+	#unstucl
+	if stuck_check.get_overlapping_bodies():
+		position = was_at	
+	was_at = position
+	
 	# every frame place mode - is this the phycokenetic thing?
 	#region
 	
@@ -179,30 +197,6 @@ func _physics_process(delta):
 	
 	#START OF NEW STUFF (movement ver.2) ##########################################################
 	
-	#GRAB AND RELEASE
-	#region
-	if Input.is_action_just_pressed("place"):
-		grab = true
-	if Input.is_action_just_released("place"):
-		drop_hand()
-		grab = false
-		
-	if grab:
-		print("boop")
-		var pets = grabbox.get_overlapping_bodies().filter(func(b): return b.is_in_group("pets"))
-		print(pets)
-		var pet = pets.pop_back()
-		if is_instance_valid(pet):
-			pet.get_parent().remove_child(pet)
-			pet.pick_up()
-			pet.position = Vector2.ZERO
-			(func(): hand.add_child(pet)).call_deferred()
-			held = pet
-				
-	
-	#endregion
-	
-	
 	#HORIZONTAL MOVEMENT
 	#region
 	#move left and right
@@ -238,6 +232,9 @@ func _physics_process(delta):
 	is_jumping = false
 	var ups  = (abs(velocity.x)/g_top_speed)*running_jump + jump_strength
 	if Input.is_action_just_pressed("jump") and is_on_floor() :
+		#stuck checl
+		if stuck_check.get_overlapping_bodies():
+			print("is stuck")
 		#running start
 		#var ups  = (abs(velocity.x)/g_top_speed)*running_jump + jump_strength
 		is_jumping = true
@@ -251,7 +248,36 @@ func _physics_process(delta):
 		velocity.y = move_toward(velocity.y, max_fall_speed, grav_on_fall*delta*fall_grav)
 		is_jumping = false
 		player_state = MoveState.falling
-			
+		
+	
+	
+	
+	#endregion
+	
+	#GRAB AND RELEASE
+	#region
+	if Input.is_action_just_pressed("place"):
+		grab = true
+		if direction == 1 :
+			grab_box.position = Vector2(7,0)
+		else :
+			grab_box.position = Vector2(-7,0) 
+	if Input.is_action_just_released("place"):
+		drop_hand()
+		carry = false
+		grab = false
+		
+	if grab and !carry:
+		var pets = grabbox.get_overlapping_bodies().filter(func(b): return b.is_in_group("pets"))
+		var pet = pets.pop_back()
+		if is_instance_valid(pet):
+			pet.get_parent().remove_child(pet)
+			pet.pick_up()
+			pet.position = Vector2.ZERO
+			(func(): hand.add_child(pet)).call_deferred()
+			held = pet
+			carry = true
+				
 	#endregion
 	
 	#apply physics!!
@@ -601,15 +627,17 @@ func drop_hand():
 	pet.get_parent().remove_child(pet)
 	pet.position = gpos
 	
-	var throw_mod_x = 300 *direction
-	var throw_mod_y = -200
+	var throw_mod_x = 2000000000000000
+	var throw_mod_y = -150
 	if Input.is_action_pressed("move_down"):
-		throw_mod_x = 0
+		throw_mod_x = 25
 		throw_mod_y = 0
-	if Input.is_action_pressed("up"): 
-		throw_mod_y = throw_strength_y
+	if Input.is_action_pressed("move_up"): 
+		print("throw up!!")
+		throw_mod_y = -300
+		throw_mod_x = 50;
 	
-	pet.velocity.x = velocity.x +throw_mod_x
+	pet.velocity.x = velocity.x +throw_mod_x*direction
 	pet.velocity.y = velocity.y +throw_mod_y
 	pet.drop()
 	(func(): get_parent().add_child(pet)).call_deferred()

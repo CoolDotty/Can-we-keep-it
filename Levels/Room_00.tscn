@@ -19,3 +19,9 @@ zoom = Vector2(4, 4)
 
 [node name="Mouse" parent="." instance=ExtResource("3_btiw5")]
 position = Vector2(293, 70)
+
+[node name="Mouse2" parent="." instance=ExtResource("3_btiw5")]
+position = Vector2(96, 34)
+
+[node name="Mouse3" parent="." instance=ExtResource("3_btiw5")]
+position = Vector2(49, 76)

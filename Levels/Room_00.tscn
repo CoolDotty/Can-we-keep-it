@@ -35,3 +35,8 @@ position = Vector2(233, 118)
 
 [node name="Snake" parent="." instance=ExtResource("7_ls7es")]
 position = Vector2(103, 45)
+[node name="Mouse2" parent="." instance=ExtResource("3_btiw5")]
+position = Vector2(96, 34)
+
+[node name="Mouse3" parent="." instance=ExtResource("3_btiw5")]
+position = Vector2(49, 76)

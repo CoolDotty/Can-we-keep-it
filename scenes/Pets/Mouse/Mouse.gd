@@ -8,7 +8,7 @@ extends Pet
 
 @export var g_top_speed		= 100
 @export var g_accel 		= 150
-@export var g_decel 		=  100 #ground friction
+@export var g_decel 		= 100 #ground friction
 
 @export var a_decel 		=  3 #air friction
 
@@ -35,11 +35,14 @@ func _physics_process(delta):
 	if fidget_timer.is_stopped():
 		fidget_dir = randi_range(-1, 1)
 		fidget_timer.start(randf_range(5, 15))
-	
-	velocity.x = clamp(velocity.x + fidget_dir * g_accel, -g_top_speed, g_top_speed)
-	
-	velocity.x = move_toward(velocity.x, 0, g_decel * delta)
-	velocity.y = move_toward(velocity.y, 400, grav_normal * delta)
+	#friction
+	if _disabled: 
+		velocity.x = move_toward(velocity.x, 0, g_decel*delta)
+		velocity.y = move_toward(velocity.y, 0, grav_normal * delta)
+	else: 
+		velocity.x = clamp(velocity.x + fidget_dir * g_accel, -g_top_speed, g_top_speed)
+		velocity.x = move_toward(velocity.x, 0, g_decel * delta)
+		velocity.y = move_toward(velocity.y, 400, grav_normal * delta)
 	
 	move_and_slide()
 	
@@ -50,7 +53,7 @@ func _physics_process(delta):
 func drop():
 	super()
 	fidget_dir = 0
-	fidget_timer.start(10)
+	fidget_timer.start(60)
 
 
 func dodge():

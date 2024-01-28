@@ -236,14 +236,16 @@ func _physics_process(delta):
 	var ups  = (abs(velocity.x)/g_top_speed)*running_jump + jump_strength
 	if Input.is_action_just_pressed("jump"): 
 		if is_on_floor() :
-			#stuck checl
-			if stuck_check.get_overlapping_bodies():
-				print("is stuck")
-			#running start
-			#var ups  = (abs(velocity.x)/g_top_speed)*running_jump + jump_strength
-			is_jumping = true
-			velocity.y = ups
-			player_state = MoveState.jumping
+			if Input.is_action_pressed("move_down"):
+				# Drop through one way collisions
+				position.y += 1
+				player_state = MoveState.falling
+			else:
+				#running start
+				#var ups  = (abs(velocity.x)/g_top_speed)*running_jump + jump_strength
+				is_jumping = true
+				velocity.y = ups
+				player_state = MoveState.jumping
 	
 	if Input.is_action_just_released("jump") and velocity.y<0:
 		#calculate fall grav porportioinal to jump height/ jump strength velocity
@@ -563,6 +565,7 @@ func jumping(delta, isEntering: bool) -> void:
 	if (isEntering):
 		velocity.y = jump_strength
 		jump_hold_timer.start()
+		
 	
 	
 	velocity.y = move_toward(velocity.y, 0.0, grav_on_jump * delta)

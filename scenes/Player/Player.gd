@@ -49,6 +49,9 @@ var player_state = MoveState.falling
 @onready var placement_tester_poly = $PlacementTester/CollisionPolygon2D
 @onready var placement_tester_poly_visible = $PlacementTester/Polygon2D
 
+@onready var running_player = $RunningPlayer
+@onready var jumping_player = $JumpingPlayer
+
 
 
 #grabby droppy
@@ -233,7 +236,13 @@ func _physics_process(delta):
 		if direction == towards: accel = g_forward_speed
 		else : accel = g_reverse_speed 
 		velocity.x = move_toward(velocity.x, g_top_speed*towards,accel)
-		if is_on_floor(): player_state = MoveState.jogging
+		if is_on_floor(): 
+			player_state = MoveState.jogging
+			running_player.pitch_scale = clamp(abs(velocity.x) / 100, 0.5, 1.0)
+			if not running_player.playing :
+				running_player.play()
+		else:
+			running_player.stop()
 	#endregion
 	
 	#VERTICAL MOVEMENT - FALLING & JUMPING
@@ -244,7 +253,8 @@ func _physics_process(delta):
 	#jumping
 	is_jumping = false
 	var ups  = (abs(velocity.x)/g_top_speed)*running_jump + jump_strength
-	if Input.is_action_just_pressed("jump"): 
+	if Input.is_action_just_pressed("jump"):
+		jumping_player.play()
 		if is_on_floor() :
 			if Input.is_action_pressed("move_down"):
 				# Drop through one way collisions

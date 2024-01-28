@@ -1,7 +1,19 @@
-[gd_scene load_steps=5 format=3 uid="uid://ckybk2trj1vee"]
+[gd_scene load_steps=11 format=3 uid="uid://ckybk2trj1vee"]
 
 [ext_resource type="Script" path="res://scenes/Pets/Mouse/Mouse.gd" id="1_lruqw"]
 [ext_resource type="Texture2D" uid="uid://s5mxy6purhlu" path="res://scenes/Pets/Mouse/mouse_01.png" id="2_r6eno"]
+[ext_resource type="AudioStream" uid="uid://bq8s4cq7x6k5d" path="res://assets/petsounds/mouse1.wav" id="2_x8fi7"]
+[ext_resource type="AudioStream" uid="uid://bc71c58dsh1tm" path="res://assets/petsounds/mouse2.wav" id="3_xcttp"]
+[ext_resource type="AudioStream" uid="uid://dgwhlx5o2ws88" path="res://assets/petsounds/dropmouse.wav" id="4_1ms0x"]
+[ext_resource type="AudioStream" uid="uid://s6l5nkg2cea8" path="res://assets/petsounds/grabmouse.wav" id="5_hhmka"]
+[ext_resource type="AudioStream" uid="uid://by5ofh61dl4ji" path="res://assets/petsounds/handmouse.wav" id="6_uiye3"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_bqwn0"]
+streams_count = 2
+stream_0/stream = ExtResource("2_x8fi7")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("3_xcttp")
+stream_1/weight = 1.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fb7a4"]
 atlas = ExtResource("2_r6eno")
@@ -15,6 +27,10 @@ region = Rect2(27, 0, 27, 27)
 collision_layer = 4
 collision_mask = 5
 script = ExtResource("1_lruqw")
+idle_noise = SubResource("AudioStreamRandomizer_bqwn0")
+drop_noise = ExtResource("4_1ms0x")
+grab_noise = ExtResource("5_hhmka")
+panic_noise = ExtResource("6_uiye3")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(-5, -5, 4, -5, 4, 4, -5, 4)
@@ -33,5 +49,6 @@ position = Vector2(0, 5)
 one_shot = true
 
 [node name="Label" type="Label" parent="."]
+visible = false
 offset_right = 40.0
 offset_bottom = 23.0

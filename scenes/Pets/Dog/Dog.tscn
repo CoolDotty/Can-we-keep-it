@@ -1,7 +1,22 @@
-[gd_scene load_steps=4 format=3 uid="uid://dx0ur4uid32i7"]
+[gd_scene load_steps=11 format=3 uid="uid://dx0ur4uid32i7"]
 
 [ext_resource type="Script" path="res://scenes/Pets/Dog/Dog.gd" id="1_o6pe8"]
+[ext_resource type="AudioStream" uid="uid://dbdxkmhrrqpdj" path="res://assets/petsounds/dog1.wav" id="2_quyhw"]
 [ext_resource type="Texture2D" uid="uid://c7s6vvhlix3jn" path="res://scenes/Pets/Dog/dog_01.png" id="2_xlntk"]
+[ext_resource type="AudioStream" uid="uid://bk80kkgw6aqq0" path="res://assets/petsounds/dog2.wav" id="3_47tp7"]
+[ext_resource type="AudioStream" uid="uid://el57v32darm3" path="res://assets/petsounds/dog3.wav" id="4_hp6hb"]
+[ext_resource type="AudioStream" uid="uid://dvb3uytggn5r1" path="res://assets/petsounds/dropdog.wav" id="5_kbjmm"]
+[ext_resource type="AudioStream" uid="uid://bv77trlimxhta" path="res://assets/petsounds/grabdog.wav" id="6_v5bgv"]
+[ext_resource type="AudioStream" uid="uid://dldde0py6n5lf" path="res://assets/petsounds/handdog.wav" id="7_c5m73"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_602jg"]
+streams_count = 3
+stream_0/stream = ExtResource("2_quyhw")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("3_47tp7")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("4_hp6hb")
+stream_2/weight = 1.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ulflg"]
 atlas = ExtResource("2_xlntk")
@@ -11,6 +26,10 @@ region = Rect2(0, 0, 45, 27)
 collision_layer = 4
 collision_mask = 5
 script = ExtResource("1_o6pe8")
+idle_noise = SubResource("AudioStreamRandomizer_602jg")
+drop_noise = ExtResource("5_kbjmm")
+grab_noise = ExtResource("6_v5bgv")
+panic_noise = ExtResource("7_c5m73")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(-14, -5, 13, -5, 13, 4, -14, 4)

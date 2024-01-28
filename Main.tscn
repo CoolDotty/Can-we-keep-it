@@ -34,14 +34,16 @@ func _process(delta):
 	pass
 
 func _change_level(num: int):
-	if num >= levels.size():
-		return
-	if is_instance_valid(level):
-		level.queue_free()
-	current_level = num
-	level = levels[num].instantiate()
-	level.position = Vector2(-315, -171)
-	add_child(level)
+	(func():
+		if num >= levels.size():
+			return
+		if is_instance_valid(level):
+			level.queue_free()
+		current_level = num
+		level = levels[num].instantiate()
+		level.position = Vector2(-315, -171)
+		add_child(level)
+	).call_deferred()
 
 func _on_home_checker_body_entered(body):
 	if body.name == \"Player\":

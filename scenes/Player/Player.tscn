@@ -1,8 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://rwjo72v4gsim"]
+[gd_scene load_steps=16 format=3 uid="uid://rwjo72v4gsim"]
 
 [ext_resource type="Script" path="res://scenes/Player/Player.gd" id="1_ynfev"]
 [ext_resource type="Shader" path="res://scripts/Outline.gdshader" id="3_1j4ee"]
+[ext_resource type="AudioStream" uid="uid://ckncdma8q7k7q" path="res://assets/jogging.wav" id="4_3ilya"]
 [ext_resource type="Texture2D" uid="uid://bd11npa3k70si" path="res://scenes/Player/plop_run.png" id="4_52fsi"]
+[ext_resource type="AudioStream" uid="uid://c6o71gc6cw1jh" path="res://assets/jumping.wav" id="5_f2oqc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y01nk"]
 size = Vector2(9, 16)
@@ -108,6 +110,7 @@ wait_time = 0.5
 one_shot = true
 
 [node name="DEBUG" type="Label" parent="."]
+visible = false
 offset_left = -19.0
 offset_top = -43.0
 offset_right = 21.0
@@ -139,5 +142,12 @@ collision_mask = 24
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="PlacementTester"]
 
 [node name="Polygon2D" type="Polygon2D" parent="PlacementTester"]
+
+[node name="RunningPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_3ilya")
+volume_db = 10.0
+
+[node name="JumpingPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_f2oqc")
 
 [connection signal="body_entered" from="Grabbox" to="." method="_on_grabbox_body_entered"]

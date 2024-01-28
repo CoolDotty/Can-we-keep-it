@@ -1,7 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://bgc2jqnt8wb7u"]
+[gd_scene load_steps=8 format=3 uid="uid://bgc2jqnt8wb7u"]
 
 [ext_resource type="Script" path="res://scenes/Pets/Cat/Cat.gd" id="1_w0sh8"]
+[ext_resource type="AudioStream" uid="uid://chdu707ffnpp5" path="res://assets/petsounds/cat1.wav" id="2_1fwyx"]
 [ext_resource type="Texture2D" uid="uid://ct6ow02s2oy6p" path="res://scenes/Pets/Cat/cat_01.png" id="2_pbbn5"]
+[ext_resource type="AudioStream" uid="uid://sdudlmup1y77" path="res://assets/petsounds/dropcat.wav" id="3_c1wph"]
+[ext_resource type="AudioStream" uid="uid://bx4wgxc4mxi3b" path="res://assets/petsounds/grabcat.wav" id="4_mcqx0"]
+[ext_resource type="AudioStream" uid="uid://chowy2fcygkbe" path="res://assets/petsounds/handcat.wav" id="5_4lr8q"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yt2cj"]
 atlas = ExtResource("2_pbbn5")
@@ -11,6 +15,10 @@ region = Rect2(0, 0, 36, 27)
 collision_layer = 20
 collision_mask = 5
 script = ExtResource("1_w0sh8")
+idle_noise = ExtResource("2_1fwyx")
+drop_noise = ExtResource("3_c1wph")
+grab_noise = ExtResource("4_mcqx0")
+panic_noise = ExtResource("5_4lr8q")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(-9, -5, 9, -5, 9, 4, -9, 4)

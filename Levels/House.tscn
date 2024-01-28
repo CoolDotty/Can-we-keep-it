@@ -1,0 +1,65 @@
+[gd_scene load_steps=14 format=3 uid="uid://xn0vswoniels"]
+
+[ext_resource type="PackedScene" uid="uid://cp1x400lifuke" path="res://scenes/Tilemap/Tiles.tscn" id="1_1oygd"]
+[ext_resource type="PackedScene" uid="uid://rwjo72v4gsim" path="res://scenes/Player/Player.tscn" id="2_c5yfl"]
+[ext_resource type="PackedScene" uid="uid://bl5wafnoedqvk" path="res://scenes/Furniture/Fridge/Fridge.tscn" id="4_gddtk"]
+[ext_resource type="PackedScene" uid="uid://c5cpuiydkmmpw" path="res://scenes/Pets/Giraffe/Giraffe.tscn" id="5_c4sr5"]
+[ext_resource type="PackedScene" uid="uid://ti712gsd5j2a" path="res://scenes/Furniture/Counter/Counter.tscn" id="5_v44xl"]
+[ext_resource type="PackedScene" uid="uid://bgc2jqnt8wb7u" path="res://scenes/Pets/Cat/Cat.tscn" id="6_pf7l4"]
+[ext_resource type="PackedScene" uid="uid://dx0ur4uid32i7" path="res://scenes/Pets/Dog/Dog.tscn" id="7_lq4t8"]
+[ext_resource type="PackedScene" uid="uid://bi7r7g3nuh6cu" path="res://scenes/Pets/Fred/Fred.tscn" id="8_ruijh"]
+[ext_resource type="PackedScene" uid="uid://ckybk2trj1vee" path="res://scenes/Pets/Mouse/Mouse.tscn" id="9_hxvcl"]
+[ext_resource type="PackedScene" uid="uid://bp3xrt321bew0" path="res://scenes/Pets/Pig/Pig.tscn" id="10_shll4"]
+[ext_resource type="PackedScene" uid="uid://ctsudgblrxpdu" path="res://scenes/Pets/Ricky/Ricky.tscn" id="11_spiwr"]
+[ext_resource type="PackedScene" uid="uid://cmtfmbrho8pl5" path="res://scenes/Pets/Sloth/Sloth.tscn" id="12_270t6"]
+[ext_resource type="PackedScene" uid="uid://baspmw5sb6eyf" path="res://scenes/Pets/Snake/Snake.tscn" id="13_4oava"]
+
+[node name="House" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+z_index = 999
+position = Vector2(153, -83)
+zoom = Vector2(4, 4)
+
+[node name="Tiles" parent="." instance=ExtResource("1_1oygd")]
+layer_0/tile_data = PackedInt32Array(0, 131072, 0, 1, 131072, 0, 2, 131072, 0, 3, 131072, 0, 4, 131072, 0, 5, 131072, 0, 6, 131072, 0, 7, 131072, 0, 8, 131072, 0, 9, 131072, 0, 10, 131072, 0, 11, 131072, 0, 12, 131072, 0, 13, 131072, 0, 14, 131072, 0, 15, 131072, 0, 16, 131072, 0, 17, 131072, 0, 18, 131072, 0, 19, 131072, 0, 20, 131072, 0, 21, 131072, 0, 22, 131072, 0, 23, 131072, 0, 24, 131072, 0, 25, 131072, 0, 26, 131072, 0, 27, 131072, 0, 28, 131072, 0, 29, 131072, 0, 30, 131072, 0, 31, 131072, 0, 32, 131072, 0, 33, 131072, 0, 65535, 131072, 0, -1114113, 131072, 0, -1048577, 131072, 0, -983041, 131072, 0, -917505, 131072, 0, -851969, 131072, 0, -786433, 131072, 0, -720897, 131072, 0, -655361, 131072, 0, -589825, 131072, 0, -524289, 131072, 0, -458753, 131072, 0, -393217, 131072, 0, -327681, 131072, 0, -262145, 131072, 0, -196609, 131072, 0, -131073, 131072, 0, -1179649, 131072, 0)
+
+[node name="Player" parent="." instance=ExtResource("2_c5yfl")]
+position = Vector2(16, -15)
+
+[node name="Giraffe" parent="." instance=ExtResource("5_c4sr5")]
+position = Vector2(46, -28)
+
+[node name="Furniture" type="Node2D" parent="."]
+z_index = -1
+
+[node name="Fridge" parent="Furniture" instance=ExtResource("4_gddtk")]
+position = Vector2(165, -49)
+
+[node name="Counter" parent="Furniture" instance=ExtResource("5_v44xl")]
+position = Vector2(110, -21)
+
+[node name="Cat" parent="." instance=ExtResource("6_pf7l4")]
+position = Vector2(220, -10)
+collision_layer = 4
+
+[node name="Dog" parent="." instance=ExtResource("7_lq4t8")]
+position = Vector2(285, -16)
+
+[node name="Fred" parent="." instance=ExtResource("8_ruijh")]
+position = Vector2(244, -27)
+
+[node name="Mouse" parent="." instance=ExtResource("9_hxvcl")]
+position = Vector2(272, -31)
+
+[node name="Pig" parent="." instance=ExtResource("10_shll4")]
+position = Vector2(214, -34)
+
+[node name="Ricky" parent="." instance=ExtResource("11_spiwr")]
+position = Vector2(110, -71)
+
+[node name="Sloth" parent="." instance=ExtResource("12_270t6")]
+position = Vector2(26, -46)
+
+[node name="Snake" parent="." instance=ExtResource("13_4oava")]
+position = Vector2(252, -7)

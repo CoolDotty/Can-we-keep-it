@@ -3,6 +3,9 @@ extends Polygon2D
 
 @export var sprite_open: Texture = preload("res://icon.svg")
 @export var sprite_closed: Texture = preload("res://icon.svg")
+@export var open_offset: Vector2 = Vector2.ZERO
+@export var open_sound: AudioStream
+@export var close_sound: AudioStream
 
 @onready var InsideChecker = $InsideChecker
 @onready var InsideCheckerPolygon = $InsideChecker/CollisionPolygon2D
@@ -18,16 +21,19 @@ func _ready():
 		_make_poly()
 		SpriteOpen.texture = sprite_open
 		SpriteClosed.texture = sprite_closed
+		SpriteClosed.position = open_offset
 
 func _physics_process(delta):
 	if not Engine.is_editor_hint():
 		SpriteOpen.visible = is_open
 		SpriteClosed.visible = not is_open
+		SpriteClosed.position = open_offset
 	
 	if Engine.is_editor_hint():
 		_make_poly()
 		SpriteOpen.texture = sprite_open
 		SpriteClosed.texture = sprite_closed
+		SpriteClosed.position = open_offset
 
 func _make_poly():
 	EdgeChecker.polygon = self.polygon

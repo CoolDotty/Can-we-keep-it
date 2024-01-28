@@ -29,7 +29,8 @@ func _ready():
 
 #step
 func _physics_process(delta):
-	print(position.y)
+	if _disabled:
+		return
 	if grav_on and not is_on_floor():
 		velocity.y = move_toward(velocity.y, max_fall_speed, grav_accel*delta)
 		
@@ -48,5 +49,21 @@ func drop():
 
 func place():
 	_disabled = true
+	# NOTE: This algorithm doesn't work for all shapes lmao
+	# Set collision layer to new fridge only pets layer
+	set_collision_layer_value(3, 0)
+	set_collision_layer_value(5, 1)
+	
+	# how much to scale each vertex by
+	var scaleAmount : float = 0.5
+	# reference to the PoolVector2Array on the CollisionPolygon2D
+	var polygon = collision_polygon_2d.polygon.duplicate()
+	# scale each vertex
+	for i in polygon.size():
+		polygon[i] = polygon[i] * scaleAmount
+	
+	# assign the newly scaled vertices to the CollisionPolygon2D
+	(func(): collision_polygon_2d.polygon = polygon).call_deferred()
+	z_index = -1
 	(func(): collision_polygon_2d.disabled = false).call_deferred()
 #endregion

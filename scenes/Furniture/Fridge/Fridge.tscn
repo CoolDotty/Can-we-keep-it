@@ -1,0 +1,111 @@
+[gd_scene load_steps=13 format=3 uid="uid://bl5wafnoedqvk"]
+
+[ext_resource type="Script" path="res://scenes/Furniture/Fridge/Fridge.gd" id="1_wksd2"]
+[ext_resource type="Texture2D" uid="uid://deid3nbje6x2t" path="res://assets/HouseObjects.png" id="2_a47eb"]
+[ext_resource type="AudioStream" uid="uid://bkin1y0ivw20s" path="res://assets/fridge_open.ogg" id="3_lw61l"]
+[ext_resource type="AudioStream" uid="uid://84ssnaovwwka" path="res://assets/fridge_close.ogg" id="4_augjc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k660c"]
+atlas = ExtResource("2_a47eb")
+region = Rect2(9, 144, 54, 99)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_owb2m"]
+atlas = ExtResource("2_a47eb")
+region = Rect2(15, 364, 85, 105)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3njqq"]
+size = Vector2(45, 90)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_wwnlf"]
+a = Vector2(23, 29)
+b = Vector2(-20, 29)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_wuidr"]
+a = Vector2(22, 0)
+b = Vector2(-19, 0)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_ce50t"]
+a = Vector2(23, -23)
+b = Vector2(-19, -23)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_aqprn"]
+a = Vector2(-20, -49)
+b = Vector2(24, -49)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ai1xl"]
+size = Vector2(53, 96)
+
+[node name="Fridge" type="Node2D"]
+script = ExtResource("1_wksd2")
+
+[node name="SpriteClosed" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_k660c")
+
+[node name="SpriteOpen" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(-14, -2)
+texture = SubResource("AtlasTexture_owb2m")
+
+[node name="AudioOpen" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_lw61l")
+
+[node name="AudioClosed" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_augjc")
+
+[node name="InsideChecker" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InsideChecker"]
+position = Vector2(2, -2)
+shape = SubResource("RectangleShape2D_3njqq")
+
+[node name="EdgeChecker" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="EdgeChecker"]
+build_mode = 1
+polygon = PackedVector2Array(-23, -49, 26, -49, 26, 44, -23, 44)
+
+[node name="Shelf1" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Shelf1"]
+shape = SubResource("SegmentShape2D_wwnlf")
+disabled = true
+one_way_collision = true
+
+[node name="Shelf2" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Shelf2"]
+shape = SubResource("SegmentShape2D_wuidr")
+disabled = true
+one_way_collision = true
+
+[node name="Shelf3" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Shelf3"]
+shape = SubResource("SegmentShape2D_ce50t")
+disabled = true
+one_way_collision = true
+
+[node name="TopOfFridge" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TopOfFridge"]
+shape = SubResource("SegmentShape2D_aqprn")
+one_way_collision = true
+
+[node name="Contents" type="Node2D" parent="."]
+top_level = true
+
+[node name="OpenChecker" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OpenChecker"]
+position = Vector2(0.5, 1)
+shape = SubResource("RectangleShape2D_ai1xl")
+debug_color = Color(0, 1, 0, 0.419608)
+
+[connection signal="body_entered" from="OpenChecker" to="." method="_on_open_checker_body_entered"]
+[connection signal="body_exited" from="OpenChecker" to="." method="_on_open_checker_body_exited"]

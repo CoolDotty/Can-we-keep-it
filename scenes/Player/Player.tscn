@@ -132,4 +132,12 @@ debug_color = Color(0.956863, 0, 0.537255, 0.419608)
 [node name="Feet" type="Node2D" parent="."]
 position = Vector2(0, 12)
 
+[node name="PlacementTester" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 24
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="PlacementTester"]
+
+[node name="Polygon2D" type="Polygon2D" parent="PlacementTester"]
+
 [connection signal="body_entered" from="Grabbox" to="." method="_on_grabbox_body_entered"]

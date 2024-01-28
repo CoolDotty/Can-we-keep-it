@@ -45,6 +45,9 @@ var player_state = MoveState.falling
 @onready var grabbox = $Grabbox
 @onready var place_checker = $Player/Hand/PlaceChecker
 @onready var place_checker_collision = $Player/Hand/PlaceChecker/CollisionPolygon2D
+@onready var placement_tester = $PlacementTester
+@onready var placement_tester_poly = $PlacementTester/CollisionPolygon2D
+@onready var placement_tester_poly_visible = $PlacementTester/Polygon2D
 
 
 
@@ -128,8 +131,8 @@ func _process(delta):
 #PHYSICS STEP
 func _physics_process(delta):
 	#unstucl
-	if stuck_check.get_overlapping_bodies():
-		print(stuck_check.get_overlapping_bodies())
+	var walls = stuck_check.get_overlapping_bodies().filter(func(b): return not b.get_child(0).one_way_collision)
+	if walls.size() > 0:
 		position = was_at
 	else:
 		was_at = position
@@ -180,16 +183,15 @@ func _physics_process(delta):
 			#place_checker.visible = false
 		#return
 		pass
-		
-	if Input.is_action_just_pressed("place_mode") and not is_place_mode and is_instance_valid(held):
-		is_place_mode = true
-		# on enter place mode
-		if is_place_mode:
-			hand.top_level = true
-			hand.position = ((self.global_position / 9).floor() * 9) + Vector2(5, -4)
-			place_checker.visible = true
-			var pet_poly = held.find_child("CollisionPolygon2D").polygon
-			place_checker_collision.polygon = pet_poly
+	
+		#is_place_mode = true
+		## on enter place mode
+		#if is_place_mode:
+			#hand.top_level = true
+			#hand.position = ((self.global_position / 9).floor() * 9) + Vector2(5, -4)
+			#place_checker.visible = true
+			#var pet_poly = held.find_child("CollisionPolygon2D").polygon
+			#place_checker_collision.polygon = pet_poly
 	#endregion
 	
 	#run animation - switch to accell or input flags later?
@@ -262,6 +264,8 @@ func _physics_process(delta):
 	
 	#GRAB AND RELEASE
 	#region
+	var valid_depot = placemode2()
+	
 	if Input.is_action_just_pressed("place"):
 		grab = true
 		if direction == 1 :
@@ -269,7 +273,7 @@ func _physics_process(delta):
 		else :
 			grab_box.position = Vector2(-7,0) 
 	if Input.is_action_just_released("place"):
-		drop_hand()
+		drop_hand(valid_depot)
 		carry = false
 		grab = false
 		
@@ -332,7 +336,61 @@ func _physics_process(delta):
 		#prev_player_state = player_state
 		##print(MoveState.keys()[player_state])
 
-
+func placemode2():
+	if not is_instance_valid(held):
+		placement_tester_poly.polygon = []
+		#held.rotation_degrees = 0
+		placement_tester_poly_visible.color = Color.TRANSPARENT
+		return null
+	
+	if Input.is_action_just_pressed("place_mode") and is_instance_valid(held):
+		held.rotation_degrees += 90
+	
+	placement_tester_poly.polygon = held.collision_polygon_2d.polygon
+	placement_tester_poly_visible.polygon = held.collision_polygon_2d.polygon
+	placement_tester_poly_visible.color = Color(1, 0, 0, 0.5)
+	placement_tester.rotation_degrees = held.rotation_degrees
+	
+	var depots = placement_tester.get_overlapping_areas()
+	var pets = placement_tester.get_overlapping_bodies()
+	var edgechecker = null
+	for d in depots:
+		if d.name == "EdgeChecker":
+			edgechecker = d
+			break
+	var insidechecker = null
+	for d in depots:
+		if d.name == "InsideChecker":
+			insidechecker = d
+			break
+	
+	
+	if is_instance_valid(edgechecker) and is_instance_valid(insidechecker) and edgechecker.owner != insidechecker.owner:
+		# Sanity check we're looking at two parts of the same thing
+		return null
+	
+	# No valid closet!
+	if not is_instance_valid(insidechecker):
+		return null
+	
+	# we HEAVILY assume these are rectangles
+	var depot_top_left = insidechecker.global_position - (insidechecker.get_child(0).shape.size / 2)
+	placement_tester.global_position.x = depot_top_left.x + snapped(hand.global_position.x - depot_top_left.x, 9)
+	
+	# If sprite width in tiles is odd !!!!
+	if abs((int(round(held.sprite_limbs.texture.region.size.rotated(held.rotation).x / 9)))) % 2 == 1:
+		placement_tester.global_position.x -= 4.5
+	placement_tester.global_position.y = depot_top_left.y + snapped(hand.global_position.y - depot_top_left.y, 9)
+	# If sprite height in tiles is odd !!!!
+	if abs(int(round(held.sprite_limbs.texture.region.size.rotated(held.rotation).y / 9))) % 2 == 1:
+		placement_tester.global_position.y -= 4.5
+	
+	if is_instance_valid(edgechecker):
+		return null
+	else:
+		if pets.size() == 0:
+			placement_tester_poly_visible.color = Color(0, 1, 0, 0.5)
+		return insidechecker.owner.contents
 
 #METHODS
 #region
@@ -629,8 +687,11 @@ func on_stun(delta, isEntering: bool) -> void:
 			player_state = MoveState.skidding
 		return
 
-func drop_hand():
+func drop_hand(depot=null):
 	if hand_is_empty():
+		return
+	if is_instance_valid(depot):
+		place_hand2(depot)
 		return
 	var pet = held
 	var gpos = pet.global_position
@@ -649,8 +710,23 @@ func drop_hand():
 	
 	pet.velocity.x = velocity.x +throw_mod_x*direction
 	pet.velocity.y = velocity.y +throw_mod_y
+	pet.rotation = 0
 	pet.drop()
 	(func(): get_parent().add_child(pet)).call_deferred()
+	held = null
+
+func place_hand2(depot: Node2D):
+	if hand_is_empty():
+		return
+	var gpos = placement_tester.global_position
+	var grot = placement_tester.global_rotation
+	held.get_parent().remove_child(held)
+	held.position = gpos
+	held.rotation = grot
+	held.place()
+	var r = held
+	(func(): depot.add_child(r)).call_deferred()
+	
 	held = null
 
 func place_hand(closet):

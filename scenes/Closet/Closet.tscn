@@ -10,7 +10,7 @@ texture = ExtResource("1_s2kdy")
 script = ExtResource("1_qlds5")
 
 [node name="InsideChecker" type="Area2D" parent="."]
-collision_layer = 8
+collision_layer = 10
 collision_mask = 2
 monitorable = false
 

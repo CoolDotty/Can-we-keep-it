@@ -714,10 +714,10 @@ func drop_hand(depot=null):
 	if Input.is_action_pressed("move_up"): 
 		print("throw up!!")
 		throw_mod_y = -300
-		throw_mod_x = 50;
+		throw_mod_x = 0
 	
-	pet.velocity.x = velocity.x +throw_mod_x*direction
-	pet.velocity.y = velocity.y +throw_mod_y
+	pet.velocity.x = (velocity.x +throw_mod_x*direction)*(1/pet.weight)
+	pet.velocity.y = (velocity.y +throw_mod_y)*(1/pet.weight)
 	pet.rotation = 0
 	pet.drop()
 	(func(): get_parent().add_child(pet)).call_deferred()

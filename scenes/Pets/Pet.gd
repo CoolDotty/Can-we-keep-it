@@ -64,10 +64,17 @@ func _ready():
 	panic_player.stream = panic_noise
 	add_child(panic_player)
 
+func _process(delta):
+	if _disabled:
+		var a = randi_range(0, 500)
+		print(a)
+		if a == 0:
+			panic_player.play()
+		return
+
 #step
 func _physics_process(delta):
 	if _disabled:
-		# panic_player.play()
 		return
 	#gravity
 	if grav_on and not is_on_floor():
@@ -75,7 +82,7 @@ func _physics_process(delta):
 	#friction
 	if friction and is_on_floor():
 		velocity.x = move_toward(velocity.x, 0, g_decel*delta)
-		
+	
 	move_and_slide()
 
 #methods

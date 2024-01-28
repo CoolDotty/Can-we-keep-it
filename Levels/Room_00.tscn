@@ -1,11 +1,16 @@
-[gd_scene load_steps=7 format=3 uid="uid://bhppkwlf8uo2u"]
+[gd_scene load_steps=12 format=3 uid="uid://bhppkwlf8uo2u"]
 
 [ext_resource type="PackedScene" uid="uid://rwjo72v4gsim" path="res://scenes/Player/Player.tscn" id="1_l1s63"]
 [ext_resource type="PackedScene" uid="uid://cp1x400lifuke" path="res://scenes/Tilemap/Tiles.tscn" id="2_7b6xt"]
 [ext_resource type="PackedScene" uid="uid://ckybk2trj1vee" path="res://scenes/Pets/Mouse/Mouse.tscn" id="3_btiw5"]
-[ext_resource type="PackedScene" uid="uid://bgc2jqnt8wb7u" path="res://scenes/Pets/Fred/Fred.tscn" id="5_2pjgj"]
+[ext_resource type="PackedScene" uid="uid://bgc2jqnt8wb7u" path="res://scenes/Pets/Cat/Cat.tscn" id="4_ow2tk"]
+[ext_resource type="PackedScene" uid="uid://bi7r7g3nuh6cu" path="res://scenes/Pets/Fred/Fred.tscn" id="5_2pjgj"]
 [ext_resource type="PackedScene" uid="uid://c5cpuiydkmmpw" path="res://scenes/Pets/Giraffe/Giraffe.tscn" id="6_j2aav"]
 [ext_resource type="PackedScene" uid="uid://baspmw5sb6eyf" path="res://scenes/Pets/Snake/Snake.tscn" id="7_ls7es"]
+[ext_resource type="PackedScene" uid="uid://dx0ur4uid32i7" path="res://scenes/Pets/Dog/Dog.tscn" id="8_es8su"]
+[ext_resource type="PackedScene" uid="uid://bp3xrt321bew0" path="res://scenes/Pets/Pig/Pig.tscn" id="9_lks2u"]
+[ext_resource type="PackedScene" uid="uid://ctsudgblrxpdu" path="res://scenes/Pets/Ricky/Ricky.tscn" id="10_ub22d"]
+[ext_resource type="PackedScene" uid="uid://cmtfmbrho8pl5" path="res://scenes/Pets/Sloth/Sloth.tscn" id="11_b5w8e"]
 
 [node name="Room00" type="Node2D"]
 
@@ -23,12 +28,6 @@ zoom = Vector2(4, 4)
 [node name="Mouse" parent="." instance=ExtResource("3_btiw5")]
 position = Vector2(293, 70)
 
-[node name="Cat" parent="." instance=ExtResource("5_2pjgj")]
-position = Vector2(32, 114)
-
-[node name="Fred" parent="." instance=ExtResource("5_2pjgj")]
-position = Vector2(66, 76)
-
 [node name="Giraffe" parent="." instance=ExtResource("6_j2aav")]
 position = Vector2(233, 118)
 
@@ -40,3 +39,21 @@ position = Vector2(96, 34)
 
 [node name="Mouse3" parent="." instance=ExtResource("3_btiw5")]
 position = Vector2(49, 76)
+
+[node name="Cat" parent="." instance=ExtResource("4_ow2tk")]
+position = Vector2(156, 161)
+
+[node name="Fred" parent="." instance=ExtResource("5_2pjgj")]
+position = Vector2(110, 132)
+
+[node name="Dog" parent="." instance=ExtResource("8_es8su")]
+position = Vector2(151, 61)
+
+[node name="Pig" parent="." instance=ExtResource("9_lks2u")]
+position = Vector2(215, 75)
+
+[node name="Ricky" parent="." instance=ExtResource("10_ub22d")]
+position = Vector2(222, 38)
+
+[node name="Sloth" parent="." instance=ExtResource("11_b5w8e")]
+position = Vector2(271, 41)

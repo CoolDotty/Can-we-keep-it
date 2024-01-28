@@ -8,6 +8,8 @@ atlas = ExtResource("2_is3us")
 region = Rect2(0, 0, 45, 36)
 
 [node name="Fred" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 5
 script = ExtResource("1_0rvoh")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]

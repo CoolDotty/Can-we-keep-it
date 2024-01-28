@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://bd11npa3k70si" path="res://scenes/Player/plop_run.png" id="4_52fsi"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y01nk"]
-size = Vector2(9, 16)
+size = Vector2(24, 23)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2mjv4"]
 shader = ExtResource("3_1j4ee")
@@ -71,15 +71,14 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fnku6"]
-size = Vector2(14, 16.5)
+size = Vector2(26, 24)
 
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
-collision_mask = 5
 script = ExtResource("1_ynfev")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-0.5, 0)
+position = Vector2(0, -1)
 shape = SubResource("RectangleShape2D_y01nk")
 
 [node name="Player" type="AnimatedSprite2D" parent="."]
@@ -120,7 +119,7 @@ collision_layer = 2
 collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Grabbox"]
-position = Vector2(0, -1.25)
+position = Vector2(0, -1)
 shape = SubResource("RectangleShape2D_fnku6")
 debug_color = Color(0.956863, 0, 0.537255, 0.419608)
 

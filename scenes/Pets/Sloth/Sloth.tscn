@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bijnmycfqtuo5"]
 
-[node name="PetBase" type="CharacterBody2D"]
+[node name="Sloth" type="CharacterBody2D"]
 collision_layer = 4
 collision_mask = 5
 

@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://dx0ur4uid32i7"]
+
+[ext_resource type="Script" path="res://scenes/Pets/Dog/Dog.gd" id="1_o6pe8"]
+[ext_resource type="Texture2D" uid="uid://c7s6vvhlix3jn" path="res://scenes/Pets/Dog/dog_01.png" id="2_xlntk"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ulflg"]
+atlas = ExtResource("2_xlntk")
+region = Rect2(0, 0, 45, 27)
+
+[node name="Dog" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 5
+script = ExtResource("1_o6pe8")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-14, -5, 13, -5, 13, 4, -14, 4)
+one_way_collision = true
+
+[node name="SpriteLimbs" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_ulflg")
+
+[node name="SpriteNoLimbs" type="Sprite2D" parent="."]
+visible = false

@@ -1,15 +1,8 @@
-extends CharacterBody2D
+extends Pet
 
 #Initiate Variables
 #region
-@export var species: String
-@export var nickname: String
 
-@onready var sprite_limbs = $SpriteLimbs
-@onready var sprite_no_limbs = $SpriteNoLimbs
-@onready var collision_polygon_2d = $CollisionPolygon2D
-
-@onready var feet = $Feet
 @onready var fidget_timer = $FidgetTimer
 
 
@@ -22,14 +15,7 @@ extends CharacterBody2D
 @export var jump_strength 	= -400
 @export var grav_normal		=  980 #normal gravity, like when move off a ledge
 
-var panic = 0
 var fidget_dir: int = 0
-
-var _disabled = false
-#endregion
-#??? - kelvin
-func _ready():
-	self.add_to_group("pets")
 
 
 func _physics_process(delta):
@@ -61,22 +47,11 @@ func _physics_process(delta):
 		velocity.y += jump_strength
 
 
-func pick_up():
-	_disabled = true
-	(func(): collision_polygon_2d.disabled = true).call_deferred()
-	velocity = Vector2.ZERO
+func drop():
+	super()
+	fidget_dir = 0
+	fidget_timer.start(10)
 
 
 func dodge():
 	velocity += Vector2(jump_strength, 0).rotated(randf_range(0.0, PI))
-
-
-func drop():
-	_disabled = false
-	fidget_dir = 0
-	#fidget_timer.start(10)
-	(func(): collision_polygon_2d.disabled = false).call_deferred()
-
-func place():
-	_disabled = true
-	(func(): collision_polygon_2d.disabled = false).call_deferred()

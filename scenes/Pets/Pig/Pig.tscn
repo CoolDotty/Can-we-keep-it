@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://bp3xrt321bew0"]
+
+[ext_resource type="Script" path="res://scenes/Pets/Pig/Pig.gd" id="1_5cmi1"]
+[ext_resource type="Texture2D" uid="uid://rpscanvat0x2" path="res://scenes/Pets/Pig/pig_01.png" id="2_qh17y"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y7ess"]
+atlas = ExtResource("2_qh17y")
+region = Rect2(0, 315, 36, 36)
+
+[node name="Pig" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 5
+script = ExtResource("1_5cmi1")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-9, -9, 9, -9, 9, 9, -9, 9)
+one_way_collision = true
+
+[node name="SpriteLimbs" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_y7ess")
+
+[node name="SpriteNoLimbs" type="Sprite2D" parent="."]
+visible = false

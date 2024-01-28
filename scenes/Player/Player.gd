@@ -68,7 +68,8 @@ var was_at = position
 
 func _ready():
 	#stuck check
-	stuck_collision_shape_2d.shape = player_collision_shape_2d.shape
+	stuck_collision_shape_2d.shape = player_collision_shape_2d.shape.duplicate()
+	stuck_collision_shape_2d.shape.size = stuck_collision_shape_2d.shape.size - Vector2(1, 1)
 
 #animation
 func _process(delta):

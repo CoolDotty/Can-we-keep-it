@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://cmptpmiuj5tdm"]
+[gd_scene load_steps=5 format=3 uid="uid://10bmrx52k2h7"]
 
 [ext_resource type="PackedScene" uid="uid://cp1x400lifuke" path="res://scenes/Tilemap/Tiles.tscn" id="1_gxlao"]
 [ext_resource type="PackedScene" uid="uid://dx0ur4uid32i7" path="res://scenes/Pets/Dog/Dog.tscn" id="3_oqrjx"]

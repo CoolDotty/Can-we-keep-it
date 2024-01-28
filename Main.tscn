@@ -1,11 +1,18 @@
-[gd_scene load_steps=9 format=3 uid="uid://duf2keijulwq1"]
+[gd_scene load_steps=16 format=3 uid="uid://duf2keijulwq1"]
 
-[ext_resource type="PackedScene" uid="uid://xn0vswoniels" path="res://Levels/House.tscn" id="1_13v1c"]
-[ext_resource type="PackedScene" uid="uid://bhppkwlf8uo2u" path="res://Levels/Room_00.tscn" id="2_eb0f4"]
-[ext_resource type="PackedScene" uid="uid://dmnadann7vn4m" path="res://Levels/Room_01.tscn" id="2_rlpaw"]
-[ext_resource type="PackedScene" uid="uid://cmptpmiuj5tdm" path="res://Levels/Room_03.tscn" id="3_os88l"]
-[ext_resource type="PackedScene" uid="uid://b3m8mmpyyb74o" path="res://Levels/Room_05.tscn" id="4_6kiwx"]
+[ext_resource type="PackedScene" uid="uid://bindlkphfb8q7" path="res://Levels/Room_02.tscn" id="1_2fafd"]
+[ext_resource type="PackedScene" uid="uid://uncfk3k2ni1e" path="res://Levels/House.tscn" id="1_13v1c"]
+[ext_resource type="PackedScene" uid="uid://cibfcflh33wjk" path="res://Levels/Room_01.tscn" id="2_rlpaw"]
+[ext_resource type="PackedScene" uid="uid://10bmrx52k2h7" path="res://Levels/Room_03.tscn" id="3_os88l"]
+[ext_resource type="PackedScene" uid="uid://b8ufo47dm870u" path="res://Levels/Room_05.tscn" id="4_6kiwx"]
+[ext_resource type="PackedScene" uid="uid://cjwkwovossby8" path="res://Levels/Room_04.tscn" id="5_roy17"]
 [ext_resource type="AudioStream" uid="uid://c2vypspd4al22" path="res://assets/GAMEJAM VANCOUVER 2024_ANIMALJAM_MUSIC.ogg" id="6_0aem8"]
+[ext_resource type="PackedScene" uid="uid://v2j0h0vfd7vh" path="res://Levels/Room_06.tscn" id="6_b3qgv"]
+[ext_resource type="PackedScene" uid="uid://cig6tiqge4r71" path="res://Levels/Room_07.tscn" id="7_bpbar"]
+[ext_resource type="PackedScene" uid="uid://6pwyvj6wj1cu" path="res://Levels/Room_08.tscn" id="8_k5nas"]
+[ext_resource type="PackedScene" uid="uid://cc64k6bx2i8xu" path="res://Levels/Room_09.tscn" id="9_thcvb"]
+[ext_resource type="PackedScene" uid="uid://b5r8id8c04sjo" path="res://Levels/Room_10.tscn" id="10_ksv3y"]
+[ext_resource type="PackedScene" uid="uid://bpiwtsyifl3or" path="res://Levels/Room_11.tscn" id="11_7ofne"]
 
 [sub_resource type="GDScript" id="GDScript_opjee"]
 script/source = "extends Node2D
@@ -63,7 +70,7 @@ size = Vector2(643, 255)
 
 [node name="Main" type="Node2D"]
 script = SubResource("GDScript_opjee")
-levels = Array[PackedScene]([ExtResource("2_eb0f4"), ExtResource("2_rlpaw"), ExtResource("3_os88l"), ExtResource("4_6kiwx")])
+levels = Array[PackedScene]([ExtResource("1_2fafd"), ExtResource("2_rlpaw"), ExtResource("3_os88l"), ExtResource("5_roy17"), ExtResource("4_6kiwx"), ExtResource("6_b3qgv"), ExtResource("7_bpbar"), ExtResource("8_k5nas"), ExtResource("9_thcvb"), ExtResource("10_ksv3y"), ExtResource("11_7ofne")])
 
 [node name="House" parent="." instance=ExtResource("1_13v1c")]
 position = Vector2(9, 0)

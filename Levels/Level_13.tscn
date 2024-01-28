@@ -1,7 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://dbo6a2j2cdpso"]
+[gd_scene load_steps=4 format=3 uid="uid://dbo6a2j2cdpso"]
 
 [ext_resource type="PackedScene" uid="uid://cp1x400lifuke" path="res://scenes/Tilemap/Tiles.tscn" id="1_infvy"]
-[ext_resource type="PackedScene" uid="uid://rwjo72v4gsim" path="res://scenes/Player/Player.tscn" id="2_rmbhl"]
 [ext_resource type="PackedScene" uid="uid://ckybk2trj1vee" path="res://scenes/Pets/Mouse/Mouse.tscn" id="3_ngqpg"]
 [ext_resource type="PackedScene" uid="uid://bgc2jqnt8wb7u" path="res://scenes/Pets/Cat/Cat.tscn" id="4_lk2hv"]
 
@@ -13,9 +12,6 @@ layer_0/tile_data = PackedInt32Array(0, 786433, 6, 65536, 786433, 6, 131072, 786
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(160, 90)
 zoom = Vector2(4, 4)
-
-[node name="Player" parent="." instance=ExtResource("2_rmbhl")]
-position = Vector2(294, 163)
 
 [node name="Mouse" parent="." instance=ExtResource("3_ngqpg")]
 position = Vector2(43, 37)

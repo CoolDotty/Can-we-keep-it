@@ -22,9 +22,9 @@ func _audio_register(name):
 	return a
 
 @onready var idle_player = _audio_register("IdlePlayer")
-@onready var idle_player = _audio_register("DropPlayer")
-@onready var idle_player = _audio_register("GrabPlayer")
-@onready var idle_player = _audio_register("PanicPlayer")
+@onready var drop_player = _audio_register("DropPlayer")
+@onready var grab_player = _audio_register("GrabPlayer")
+@onready var panic_player = _audio_register("PanicPlayer")
 
 var _disabled = false
 
